@@ -1,5 +1,5 @@
 from Modules.registrations import registar_mascota, registar_consulta
-from Modules.base_de_datos import mascotas_registradas, consulta_por_mascota
+from Modules.base_de_datos import registered_pets, query_by_pet
 from Modules.clean_terminal import limpiar_terminal
 import pyfiglet
 import typer
@@ -31,17 +31,17 @@ def main():
             match user_input:
                 case "1":
                     registar_mascota()
-                    print(mascotas_registradas())
+                    print(registered_pets())
                 case "2":
                     registar_consulta()
                 case "3":
-                    mascotas_registradas()
+                    registered_pets()
                 case "4":
                     print('Ingrese el nombre de la mascota')
                     nombre_mascota = input()
                     print('Ingrese el nombre del dueño')
                     nombre_owner = input()
-                    consulta_por_mascota(nombre_mascota, nombre_owner)
+                    query_by_pet(nombre_mascota, nombre_owner)
 
                 case "5":
                     if typer.confirm("¿Está seguro de que desea salir?"):
