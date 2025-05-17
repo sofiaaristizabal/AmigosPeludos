@@ -1,8 +1,9 @@
-from Modules.base_de_datos import add_pet, add_owner, find_pet, add_query, find_owner
-from Modules.Owner import Owner
-from Modules.Pet import Pet
-from Modules.Query import Query
-from Modules.checker import verify_date, verify_number
+from Modulos.Owner import Owner
+from Modulos.Pet import Pet
+from Modulos.Query import Query
+from Modulos.checker import verify_date, verify_number
+from Modulos.base_de_datos import add_pet, add_owner, find_pet, add_query, find_owner
+
 
 def registar_mascota():
 

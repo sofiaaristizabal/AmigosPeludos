@@ -1,6 +1,6 @@
-from Modules.registrations import registar_mascota, registar_consulta
-from Modules.base_de_datos import registered_pets, query_by_pet
-from Modules.clean_terminal import limpiar_terminal
+from Modulos.registrations import registar_mascota, registar_consulta
+from Modulos.base_de_datos import registered_pets, query_by_pet
+from Modulos.clean_terminal import limpiar_terminal
 import pyfiglet
 import typer
 from rich import print
