@@ -10,9 +10,9 @@ _owners: list[Owner] = [
 ]
 
 _pets: list[Pet] = [
-    Pet('Lucas', 'French Poodle', '11/02/2013', 'French Poodle', 'Santiago Yepes'),
-    Pet('Ilo', 'Golden Retriever', '05/07/2018', 'Golden Retriever', 'Sofia Aristizabal'),
-    Pet('Pollo', 'Bulldog', '23/09/2020', 'Bulldog', 'Simon Gomez')
+    Pet('Lucas', 'French Poodle', '11/02/2013', 'French Poodle', _owners[0]),
+    Pet('Ilo', 'Golden Retriever', '05/07/2018', 'Golden Retriever', _owners[1]),
+    Pet('Pollo', 'Bulldog', '23/09/2020', 'Bulldog', _owners[2])
 ]
 
 _queries: list[Query] = [
@@ -48,7 +48,7 @@ def find_pet(nombre_mascota, nombre_owner):
 
     return None
 
-def find_owner(nombre_owner, telefono):
+def find_owner(nombre_owner, telefono) -> Owner | None:
     for owner in _owners:
         if owner.nombre == nombre_owner and owner.telefono == telefono:
             return owner
@@ -68,3 +68,10 @@ def query_by_pet(nombre_mascota, nombre_owner):
 
 def registered_pets():
     print('\n'.join(str(mascota) for mascota in _pets))
+
+def get_all_pets():
+    return _pets.copy()
+
+
+    
+    

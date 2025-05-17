@@ -1,6 +1,8 @@
 from Modulos.registrations import registar_mascota, registar_consulta
 from Modulos.base_de_datos import registered_pets, query_by_pet
 from Modulos.clean_terminal import limpiar_terminal
+from Modulos.checker import check_valid_option
+from Modulos.menus import list_all_pets
 import pyfiglet
 import typer
 from rich import print
@@ -27,23 +29,28 @@ def main():
 
             # user_input = input('Numero: ') 
             user_input = typer.prompt("Seleccione una opción [1-5]")
+            user_input = check_valid_option(user_input, 1, 5)
+
+            while not user_input:
+                print("La Opción seleccionada no es valida, vuelve a intentar")
+                user_input = typer.prompt("Seleccione una opcion [1-5]")
 
             match user_input:
-                case "1":
+                case 1:
                     registar_mascota()
                     print(registered_pets())
-                case "2":
+                case 2:
                     registar_consulta()
-                case "3":
-                    registered_pets()
-                case "4":
+                case 3:
+                    list_all_pets()
+                case 4:
                     print('Ingrese el nombre de la mascota')
                     nombre_mascota = input()
                     print('Ingrese el nombre del dueño')
                     nombre_owner = input()
                     query_by_pet(nombre_mascota, nombre_owner)
 
-                case "5":
+                case 5:
                     if typer.confirm("¿Está seguro de que desea salir?"):
                         raise typer.Exit(code = 1)
     except typer.Exit as e:

@@ -28,6 +28,11 @@ def registar_mascota():
             print('Ingrese el numero de telefono del dueño de la mascota: ')
             telefono = input()
             owner = find_owner(nombre, telefono)
+
+            if owner is None:
+                print("Dueño no encontrado. No se puede registrar la mascota.")
+                return
+            
             mascota = Pet(nombre_mascota, especie, fecha_de_nacimiento, raza, owner)
             add_pet(mascota)
         case "2":
