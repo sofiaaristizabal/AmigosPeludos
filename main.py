@@ -1,4 +1,4 @@
-from Modules.Cuestionario import registar_mascota, registar_consulta
+from Modules.registrations import registar_mascota, registar_consulta
 from Modules.base_de_datos import mascotas_registradas, consulta_por_mascota
 from Modules.clean_terminal import limpiar_terminal
 import pyfiglet
@@ -11,9 +11,9 @@ def main():
     try:
         while True:
             limpiar_terminal()
-            print("==" * 100)
+            print("=" * 100)
             print(pyfiglet.figlet_format("MENU PRINCIPAL"))
-            print("==" * 100)
+            print("=" * 100)
 
             table = Table("Comando", "Descripción")
             table.add_row("1", "Registrar mascota")
@@ -23,7 +23,7 @@ def main():
             table.add_row("5", "Salir de la aplicación")
 
             print(table)
-            print("==" * 100)
+            print("=" * 100)
 
             # user_input = input('Numero: ') 
             user_input = typer.prompt("Seleccione una opción [1-5]")

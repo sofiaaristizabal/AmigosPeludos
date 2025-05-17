@@ -1,6 +1,6 @@
 from Modules.base_de_datos import add_mascota, add_owners, buscar_mascota, add_consulta, buscar_owner
 from Modules.Owner import Owner
-from Modules.Mascota import Mascota
+from Modules.Pet import Pet
 from Modules.Query import Query
 from Modules.checker import verify_date, verify_number
 
@@ -27,7 +27,7 @@ def registar_mascota():
             print('Ingrese el numero de telefono del dueño de la mascota: ')
             telefono = input()
             owner = buscar_owner(nombre, telefono)
-            mascota = Mascota(nombre_mascota, especie, fecha_de_nacimiento, raza, owner)
+            mascota = Pet(nombre_mascota, especie, fecha_de_nacimiento, raza, owner)
             add_mascota(mascota)
         case "2":
             print('Ingrese el nombre del dueño de la mascota')
@@ -42,7 +42,7 @@ def registar_mascota():
             owner = Owner(nombre, numero, direccion)
             add_owners(owner)
 
-            mascota = Mascota(nombre_mascota, especie, fecha_de_nacimiento, raza, owner)
+            mascota = Pet(nombre_mascota, especie, fecha_de_nacimiento, raza, owner)
             add_mascota(mascota)
 
 def registar_consulta():

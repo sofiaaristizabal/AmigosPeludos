@@ -1,6 +1,6 @@
 from datetime import datetime, date
 
-class Mascota:
+class Pet:
     # Constructor
     def __init__(self, nombre: str, especie: str, fecha_de_nacimiento: str, raza: str, owner):
         self.nombre = nombre
@@ -22,7 +22,7 @@ class Mascota:
         Decorator used to define a method that can be accessed like an attribute
     """
     @property
-    def edad(self):
+    def age(self):
         fecha = datetime.strptime(self.fecha_de_nacimiento, "%d/%m/%Y").date()
         today = date.today()
         if (fecha.month,fecha.day) < (today.month, today.day):
@@ -33,7 +33,7 @@ class Mascota:
         return edad
 
     def __str__(self):
-        return f'Mascota: {self.nombre}, edad:{self.edad}, dueño: {self.owner.nombre} '
+        return f'Mascota: {self.nombre}, edad:{self.age}, dueño: {self.owner.nombre} '
 
     """
     __eq__: Compares if two objects type Mascota are equal
@@ -44,7 +44,7 @@ class Mascota:
             Returns True or False
     """
     def __eq__(self, other):
-        if not isinstance(other, Mascota):
+        if not isinstance(other, Pet):
             return False
         return (self.nombre == other.nombre and
                 self.owner.nombre == other.owner.nombre and
