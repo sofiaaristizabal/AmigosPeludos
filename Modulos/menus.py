@@ -5,7 +5,6 @@ from rich.table import Table
 import typer
 from rich.console import Console
 
-## Method needs to be moved to another directory
 def list_all_pets():
     limpiar_terminal()
 
