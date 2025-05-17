@@ -1,9 +1,8 @@
 from datetime import datetime, date
-from Owner import Owner
 
 class Mascota:
-
-    def __init__(self, nombre: str, especie: str, fecha_de_nacimiento: str, raza: str, owner: Owner):
+    # Constructor
+    def __init__(self, nombre: str, especie: str, fecha_de_nacimiento: str, raza: str, owner):
         self.nombre = nombre
         self.especie = especie
         self.fecha_de_nacimiento = fecha_de_nacimiento

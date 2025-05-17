@@ -1,8 +1,8 @@
 from Modules.base_de_datos import add_mascota, add_owners, buscar_mascota, add_consulta, buscar_owner
 from Modules.Owner import Owner
 from Modules.Mascota import Mascota
-from Modules.Consulta import Consulta
-from Modules.Verificaciones import verificar_fecha, verificar_numero
+from Modules.Query import Query
+from Modules.checker import verify_date, verify_number
 
 def registar_mascota():
 
@@ -10,7 +10,7 @@ def registar_mascota():
     nombre_mascota = input()
     print('Ingrese la fecha de nacimiento de la mascota en formatio dd/mm/yyyy: ')
     fecha_de_nacimiento = input()
-    if not verificar_fecha(fecha_de_nacimiento):
+    if not verify_date(fecha_de_nacimiento):
         raise ValueError("fecha invalida")
     print('Ingrese la especie de la mascota: ')
     especie = input()
@@ -34,7 +34,7 @@ def registar_mascota():
             nombre = input()
             print('Ingrese su numero telefonico')
             numero = input()
-            if not verificar_numero(numero):
+            if not verify_number(numero):
                 raise ValueError('numero invalido')
             print('Ingrese su direccion')
             direccion = input()
@@ -48,7 +48,7 @@ def registar_mascota():
 def registar_consulta():
     print('Ingrese la fecha de la consulta')
     fecha = input()
-    if not verificar_fecha(fecha):
+    if not verify_date(fecha):
         raise ValueError('Fecha invalida')
     print('Ingrese el motivo de la consulta')
     motivo = input()
@@ -62,5 +62,5 @@ def registar_consulta():
     if mascota is None:
         print("Mascota no encontrada")
 
-    consulta = Consulta(fecha, motivo, diagnostico, mascota)
+    consulta = Query(fecha, motivo, diagnostico, mascota)
     add_consulta(consulta)
