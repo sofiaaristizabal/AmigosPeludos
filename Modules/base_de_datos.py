@@ -1,7 +1,19 @@
+from Pet import Pet
+from Owner import Owner
 
 mascotas = []
 owners = []
 consultas = []
+
+_owners: list[Owner] = [
+    Owner('Santiago Yepes', '3757353838', 'Siao Paulinho'),
+    Owner('Sofia Aristizabal', '3454757474', 'Ilo durado'),
+    Owner('Simon Gomez', '3758456363', 'Il Polles imeraldinha')
+]
+
+_pets: list[Pet] = [
+    Pet('Lucas', 'French Poodle', '11/02/2013', 'French Poodle', 'elvio') # Colocar owner name
+]
 
 
 def add_pet(mascota):
