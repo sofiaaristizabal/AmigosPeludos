@@ -4,6 +4,15 @@ import pyfiglet
 from rich.table import Table
 import typer
 from rich.console import Console
+from Modulos.owner import Owner
+from Modulos.pet import Pet
+from Modulos.appointment import Query
+from Modulos.checker import verify_date, verify_number
+from Modulos.base_de_datos import add_pet, add_owner, find_pet, add_query, find_owner
+from Modulos.checker import check_valid_option
+from rich import print
+import time
+
 
 def list_all_pets():
     limpiar_terminal()
@@ -21,3 +30,108 @@ def list_all_pets():
 
     typer.prompt("Escriba cualquier cosa para volver al menu principal")
 
+
+def registrar_dueno() -> Owner:
+    print("=" * 100)
+    print(pyfiglet.figlet_format("Registro de dueno"))
+    print("=" * 100)
+
+    print("Recuerde que la informacion de los duenos tiene la siguiente estructura: ")
+    tabla_dueno = Table("Nombre", "Telefono", "Direccion")
+    print(tabla_dueno)
+    print("=" * 100)
+
+    nombre = typer.prompt('\nIngrese el nombre del dueño de la mascota')
+    numero = typer.prompt('\nIngrese el numero telefonico del dueño de la mascota')
+    if not verify_number(numero):
+        raise ValueError('numero invalido')
+    
+    direccion = typer.prompt('\nIngrese la direccion del dueño de la mascota')
+
+    print("Asi quedo la informacion del dueno:")
+    tabla_dueno.add_row(nombre, numero, direccion)
+    print(tabla_dueno)
+
+    owner = Owner(nombre, numero, direccion)
+    add_owner(owner)
+    return owner
+
+
+def registar_mascota():
+    limpiar_terminal()
+
+    print("=" * 100)
+    print(pyfiglet.figlet_format("Registro de mascotas"))
+    print("=" * 100)
+
+    print("Recuerde que la informacion de las mascotas tiene la siguiente estructura: ")
+    tabla_mascota = Table("Nombre", "Especie", "Fecha de nacimiento", "Raza", "Dueño")
+    print(tabla_mascota)
+    print("=" * 100)
+
+    nombre_mascota = typer.prompt('\nIngrese el nombre de la mascota')
+
+    fecha_de_nacimiento = typer.prompt('\nIngrese la fecha de nacimiento de la mascota en formatio dd/mm/yyyy')
+    if not verify_date(fecha_de_nacimiento):
+        raise ValueError("fecha invalida")
+    
+    especie = typer.prompt('\nIngrese la especie de la mascota')
+    raza = typer.prompt('\nIngrese la raza de la mascota')
+
+    user_input = typer.prompt('\nSi el dueño ya esta registrado previamente presione 1, si el dueño aun no esta registrado presione 2')
+    
+
+    while not (selected_option := check_valid_option(user_input, 1, 5)):
+        print('La opcion seleccionada no es valida')
+        user_input = typer.prompt('\nSi el dueño ya esta registrado previamente presione 1, si el dueño aun no esta registrado presione 2')
+
+    match selected_option:
+        case 1:
+            nombre = typer.prompt('\nIngrese el nombre del dueño de la mascota')
+            telefono = typer.prompt('\nIngrese el numero de telefono del dueño de la mascota')
+            owner = find_owner(nombre, telefono)
+
+            if owner is None:
+                print("Dueño no encontrado. No se pudo registrar la mascota.")
+                return
+
+        case 2:
+            print("\n" * 2)
+            owner = registrar_dueno()
+            print("\n" * 2)
+
+    tabla_mascota.add_row(nombre_mascota, especie, fecha_de_nacimiento, raza, owner.nombre)
+    print()
+    print("=" * 100)
+    print("Asi quedo la mascota a ingresar")
+    print(tabla_mascota)
+    
+    if not typer.confirm("\nEsta seguro de ingresar la mascota?"):
+        print("[/bold red]No se realizo el registro de la mascota[/bold red]")
+        return
+    
+    mascota = Pet(nombre_mascota, especie, fecha_de_nacimiento, raza, owner)
+    add_pet(mascota)
+    print("[bold green]Se realizo exitosamente el registro de la mascota[/bold green]")
+    time.sleep(2)
+
+
+
+
+def registar_consulta():
+    fecha = typer.prompt('Ingrese la fecha de la consulta')
+    if not verify_date(fecha):
+        raise ValueError('Fecha invalida')
+    
+    motivo = typer.prompt('Ingrese el motivo de la consulta')
+    diagnostico = typer.prompt('Ingrese el diagnostico de la mascota')
+    nombre_mascota = typer.prompt('Ingrese el nombre de la mascota')
+    nombre_owner = typer.prompt('Ingrese el nombre de su dueño')
+
+    mascota = find_pet(nombre_mascota, nombre_owner)
+    if mascota is None:
+        print("Mascota no encontrada")
+        return
+
+    consulta = Query(fecha, motivo, diagnostico, mascota)
+    add_query(consulta)

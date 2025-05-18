@@ -1,8 +1,7 @@
-from Modulos.registrations import registar_mascota, registar_consulta
 from Modulos.base_de_datos import registered_pets, query_by_pet
 from Modulos.clean_terminal import limpiar_terminal
 from Modulos.checker import check_valid_option
-from Modulos.menus import list_all_pets
+import Modulos.menus as menus
 import pyfiglet
 import typer
 from rich import print
@@ -35,12 +34,11 @@ def main():
 
             match selected_option:
                 case 1:
-                    registar_mascota()
-                    print(registered_pets())
+                    menus.registar_mascota()
                 case 2:
-                    registar_consulta()
+                    menus.registar_consulta()
                 case 3:
-                    list_all_pets()
+                    menus.list_all_pets()
                 case 4:
                     print('Ingrese el nombre de la mascota')
                     nombre_mascota = input()
