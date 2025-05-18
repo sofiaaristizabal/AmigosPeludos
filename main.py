@@ -28,12 +28,10 @@ def main():
             print("=" * 100)
 
             user_input = typer.prompt("Seleccione una opción [1-5]")
-            selected_option = check_valid_option(user_input, 1, 5)
 
-            while not selected_option:
+            while not (selected_option := check_valid_option(user_input, 1, 5)):
                 print("\nLa Opción seleccionada no es valida, vuelve a intentar")
                 user_input = typer.prompt("Seleccione una opcion [1-5]")
-                selected_option = check_valid_option(user_input, 1, 5)
 
             match selected_option:
                 case 1:
