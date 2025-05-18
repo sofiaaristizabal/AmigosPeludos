@@ -27,15 +27,15 @@ def main():
             print(table)
             print("=" * 100)
 
-            # user_input = input('Numero: ') 
             user_input = typer.prompt("Seleccione una opción [1-5]")
-            user_input = check_valid_option(user_input, 1, 5)
+            selected_option = check_valid_option(user_input, 1, 5)
 
-            while not user_input:
-                print("La Opción seleccionada no es valida, vuelve a intentar")
+            while not selected_option:
+                print("\nLa Opción seleccionada no es valida, vuelve a intentar")
                 user_input = typer.prompt("Seleccione una opcion [1-5]")
+                selected_option = check_valid_option(user_input, 1, 5)
 
-            match user_input:
+            match selected_option:
                 case 1:
                     registar_mascota()
                     print(registered_pets())

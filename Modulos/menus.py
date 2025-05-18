@@ -20,3 +20,4 @@ def list_all_pets():
     console.print(pets_table)
 
     typer.prompt("Escriba cualquier cosa para volver al menu principal")
+
