@@ -1,6 +1,6 @@
-from Modulos.Pet import Pet
-from Modulos.Owner import Owner
-from Modulos.Query import Query
+from Modulos.pet import Pet
+from Modulos.owner import Owner
+from Modulos.appointment import Query
 
 
 _owners: list[Owner] = [
