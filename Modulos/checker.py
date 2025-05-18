@@ -5,13 +5,17 @@ def verify_number(numero):
     result = regex.match(numero)
     return result
 
+
 def verify_location():
+    # TODO
     pass
+
 
 def verify_date(fecha):
     regex = re.compile(r"^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}$")
     result = regex.match(fecha)
     return result
+
 
 """
 Checks if the user input in the menu is a valid option. It asumes the options in
@@ -28,7 +32,6 @@ Returns:
     bool: if the option is false
     int: the selected option
 """
-
 def check_valid_option(user_input: str, starting_range: int, ending_range: int) -> int | bool:
     if not user_input.isdecimal():
         return False
