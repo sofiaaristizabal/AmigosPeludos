@@ -65,7 +65,7 @@ def registar_mascota():
     print("=" * 100)
 
     print("Recuerde que la informacion de las mascotas tiene la siguiente estructura: ")
-    tabla_mascota = Table("Nombre", "Especie", "Fecha de nacimiento", "Raza", "Dueño")
+    tabla_mascota = Table("Nombre", "Fecha de nacimiento", "Especie", "Raza", "Dueño")
     print(tabla_mascota)
     print("=" * 100)
 
@@ -100,7 +100,7 @@ def registar_mascota():
             owner = registrar_dueno()
             print("\n" * 2)
 
-    tabla_mascota.add_row(nombre_mascota, especie, fecha_de_nacimiento, raza, owner.nombre)
+    tabla_mascota.add_row(nombre_mascota, fecha_de_nacimiento, especie, raza, owner.nombre)
     print()
     print("=" * 100)
     print("Asi quedo la mascota a ingresar")
@@ -116,9 +116,18 @@ def registar_mascota():
     time.sleep(2)
 
 
-
-
 def registar_consulta():
+    limpiar_terminal()
+
+    print("=" * 100)
+    print(pyfiglet.figlet_format("Registro de consulta"))
+    print("=" * 100)
+
+    print("Recuerde que la informacion de las consultas tiene la siguiente estructura: ")
+    tabla_mascota = Table("Nombre", "Especie", "Fecha de nacimiento", "Raza", "Dueño")
+    print(tabla_mascota)
+    print("=" * 100)
+
     fecha = typer.prompt('Ingrese la fecha de la consulta')
     if not verify_date(fecha):
         raise ValueError('Fecha invalida')
