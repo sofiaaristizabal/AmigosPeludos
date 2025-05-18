@@ -38,7 +38,7 @@ def add_owner(owner):
 
 
 def add_query(queries):
-    queries.append(queries)
+    _queries.append(queries)
 
 
 def find_pet(nombre_mascota, nombre_owner):

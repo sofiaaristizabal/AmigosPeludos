@@ -1,7 +1,8 @@
+from Modulos.pet import Pet
 
 class Query:
 
-    def __init__(self, fecha, motivo: str, diagnostico: str, mascota):
+    def __init__(self, fecha, motivo: str, diagnostico: str, mascota: Pet):
         self.fecha = fecha
         self.motivo = motivo
         self.diagnostico = diagnostico

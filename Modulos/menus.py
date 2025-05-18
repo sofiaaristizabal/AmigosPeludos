@@ -124,23 +124,38 @@ def registar_consulta():
     print("=" * 100)
 
     print("Recuerde que la informacion de las consultas tiene la siguiente estructura: ")
-    tabla_mascota = Table("Nombre", "Especie", "Fecha de nacimiento", "Raza", "Dueño")
-    print(tabla_mascota)
+    tabla_consulta = Table("Mascota", "Fecha", "Motivo", "Diagnostico", "Nombre de la Mascota")
+    print(tabla_consulta)
     print("=" * 100)
 
-    fecha = typer.prompt('Ingrese la fecha de la consulta')
-    if not verify_date(fecha):
-        raise ValueError('Fecha invalida')
-    
-    motivo = typer.prompt('Ingrese el motivo de la consulta')
-    diagnostico = typer.prompt('Ingrese el diagnostico de la mascota')
     nombre_mascota = typer.prompt('Ingrese el nombre de la mascota')
     nombre_owner = typer.prompt('Ingrese el nombre de su dueño')
-
+    
     mascota = find_pet(nombre_mascota, nombre_owner)
     if mascota is None:
         print("Mascota no encontrada")
         return
 
+    fecha = typer.prompt('Ingrese la fecha de la consulta (dd/mm/aaaa)')
+    if not verify_date(fecha):
+        raise ValueError('Fecha invalida')
+    
+    motivo = typer.prompt('Ingrese el motivo de la consulta')
+    diagnostico = typer.prompt('Ingrese el diagnostico de la mascota')
+
+    tabla_consulta = Table("Mascota", "Nombre Dueno", "Fecha", "Motivo", "Diagnostico")
+    tabla_consulta.add_row(mascota.nombre, mascota.owner.nombre, fecha, motivo, diagnostico)
+
+    print()
+    print("=" * 100)
+    print("Asi quedo la consulta a ingresar")
+    print(tabla_consulta)
+    
+    if not typer.confirm("\nEsta seguro de ingresar la consulta?"):
+        print("[/bold red]No se realizo el registro de la consulta[/bold red]")
+        return
+
     consulta = Query(fecha, motivo, diagnostico, mascota)
     add_query(consulta)
+    print("[bold green]Se realizo exitosamente el registro de la consulta[/bold green]")
+    time.sleep(2)
