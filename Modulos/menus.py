@@ -4,8 +4,8 @@ import pyfiglet
 from rich.table import Table
 import typer
 from rich.console import Console
-from Modulos.owner import Owner
-from Modulos.pet import Pet
+from Modulos.Owner import Owner
+from Modulos.Pet import Pet
 from Modulos.appointment import Query
 from Modulos.checker import verify_date, verify_number
 from Modulos.base_de_datos import add_pet, add_owner, find_pet, add_query, find_owner, query_by_pet
@@ -36,7 +36,7 @@ def registrar_dueno() -> Owner:
     print(pyfiglet.figlet_format("Registro de dueno"))
     print("=" * 100)
 
-    print("Recuerde que la informacion de los duenos tiene la siguiente estructura: ")
+    print("Recuerde que la informacion de los dueños tiene la siguiente estructura: ")
     tabla_dueno = Table("Nombre", "Telefono", "Direccion")
     print(tabla_dueno)
     print("=" * 100)
@@ -44,11 +44,11 @@ def registrar_dueno() -> Owner:
     nombre = typer.prompt('\nIngrese el nombre del dueño de la mascota')
     numero = typer.prompt('\nIngrese el numero telefonico del dueño de la mascota')
     if not verify_number(numero):
-        raise ValueError('numero invalido')
+        raise ValueError('Número invalido')
     
     direccion = typer.prompt('\nIngrese la direccion del dueño de la mascota')
 
-    print("Asi quedo la informacion del dueno:")
+    print("Asi quedó la informacion del dueno:")
     tabla_dueno.add_row(nombre, numero, direccion)
     print(tabla_dueno)
 
@@ -73,15 +73,14 @@ def registar_mascota():
 
     fecha_de_nacimiento = typer.prompt('\nIngrese la fecha de nacimiento de la mascota en formatio dd/mm/yyyy')
     if not verify_date(fecha_de_nacimiento):
-        raise ValueError("fecha invalida")
+        raise ValueError("Fecha invalida")
     
     especie = typer.prompt('\nIngrese la especie de la mascota')
     raza = typer.prompt('\nIngrese la raza de la mascota')
 
-    user_input = typer.prompt('\nSi el dueño ya esta registrado previamente presione 1, si el dueño aun no esta registrado presione 2')
+    user_input = typer.prompt('\nSi el dueño ya esta registrado previamente presione 1, si el dueño aún no esta registrado presione 2')
     
-
-    while not (selected_option := check_valid_option(user_input, 1, 5)):
+    while not (selected_option := check_valid_option(user_input, 1, 2)):
         print('La opcion seleccionada no es valida')
         user_input = typer.prompt('\nSi el dueño ya esta registrado previamente presione 1, si el dueño aun no esta registrado presione 2')
 
@@ -103,7 +102,7 @@ def registar_mascota():
     tabla_mascota.add_row(nombre_mascota, fecha_de_nacimiento, especie, raza, owner.nombre)
     print()
     print("=" * 100)
-    print("Asi quedo la mascota a ingresar")
+    print("Asi quedó la mascota a ingresar")
     print(tabla_mascota)
     
     if not typer.confirm("\nEsta seguro de ingresar la mascota?"):

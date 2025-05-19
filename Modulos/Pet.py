@@ -1,5 +1,5 @@
 from datetime import datetime, date
-from Modulos.owner import Owner
+from Modulos.Owner import Owner
 
 class Pet:
     # Constructor
