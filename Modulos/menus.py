@@ -8,7 +8,7 @@ from Modulos.owner import Owner
 from Modulos.pet import Pet
 from Modulos.appointment import Query
 from Modulos.checker import verify_date, verify_number
-from Modulos.base_de_datos import add_pet, add_owner, find_pet, add_query, find_owner
+from Modulos.base_de_datos import add_pet, add_owner, find_pet, add_query, find_owner, query_by_pet
 from Modulos.checker import check_valid_option
 from rich import print
 import time
@@ -159,3 +159,22 @@ def registar_consulta():
     add_query(consulta)
     print("[bold green]Se realizo exitosamente el registro de la consulta[/bold green]")
     time.sleep(2)
+
+
+def pets_appointments():
+    limpiar_terminal()
+
+    print("=" * 100)
+    print(pyfiglet.figlet_format("Registro de consulta"))
+    print("=" * 100)
+
+    nombre_mascota = typer.prompt("\nIngrese el nombre de la mascota")
+    nombre_owner = typer.prompt("\nIngrese el nombre del dueño")
+
+    tabla_consulta = Table("Mascota", "Nombre Dueno", "Fecha", "Motivo", "Diagnostico")
+    for consulta in query_by_pet(nombre_mascota, nombre_owner):
+        tabla_consulta.add_row(consulta.mascota.nombre, consulta.mascota.owner.nombre, consulta.fecha, consulta.motivo, consulta.diagnostico)
+
+    print("\n")
+    print(tabla_consulta)
+    typer.prompt("Escriba cualquier cosa para volver al menu principal")

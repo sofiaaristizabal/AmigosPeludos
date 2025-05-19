@@ -40,11 +40,7 @@ def main():
                 case 3:
                     menus.list_all_pets()
                 case 4:
-                    print('Ingrese el nombre de la mascota')
-                    nombre_mascota = input()
-                    print('Ingrese el nombre del dueño')
-                    nombre_owner = input()
-                    query_by_pet(nombre_mascota, nombre_owner)
+                    menus.pets_appointments()
 
                 case 5:
                     if typer.confirm("¿Está seguro de que desea salir?"):

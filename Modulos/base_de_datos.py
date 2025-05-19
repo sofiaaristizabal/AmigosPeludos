@@ -16,16 +16,16 @@ _pets: list[Pet] = [
 ]
 
 _queries: list[Query] = [
-    Query('11/02/15', 'Vaccination', 'Teeth infection', 'Pollo'),
-    Query('12/03/16', 'General Checkup', 'Healthy', 'Lucas'),
-    Query('15/04/17', 'Deworming', 'Mild worms', 'Ilo'),
-    Query('20/05/18', 'Vaccination', 'Allergic reaction', 'Pollo'),
-    Query('22/06/19', 'Dental Cleaning', 'Tartar buildup', 'Lucas'),
-    Query('30/07/20', 'Surgery', 'Neutering', 'Ilo'),
-    Query('10/08/21', 'X-ray', 'Limping', 'Pollo'),
-    Query('14/09/22', 'Blood Test', 'Routine check', 'Lucas'),
-    Query('18/10/23', 'Vaccination', 'Healthy', 'Ilo'),
-    Query('25/11/24', 'General Checkup', 'Minor cold', 'Pollo')
+    Query('11/02/15', 'Vaccination', 'Teeth infection', _pets[2]),
+    Query('12/03/16', 'General Checkup', 'Healthy', _pets[0]),
+    Query('15/04/17', 'Deworming', 'Mild worms', _pets[1]),
+    Query('20/05/18', 'Vaccination', 'Allergic reaction', _pets[2]),
+    Query('22/06/19', 'Dental Cleaning', 'Tartar buildup', _pets[0]),
+    Query('30/07/20', 'Surgery', 'Neutering', _pets[1]),
+    Query('10/08/21', 'X-ray', 'Limping', _pets[2]),
+    Query('14/09/22', 'Blood Test', 'Routine check', _pets[0]),
+    Query('18/10/23', 'Vaccination', 'Healthy', _pets[1]),
+    Query('25/11/24', 'General Checkup', 'Minor cold', _pets[2])
 ]
 
 
@@ -58,12 +58,7 @@ def find_owner(nombre_owner, telefono) -> Owner | None:
 
 def query_by_pet(nombre_mascota, nombre_owner):
     mascota = find_pet(nombre_mascota, nombre_owner)
-    consultasM = []
-    for consulta in _queries:
-        if consulta.mascota == mascota:
-            consultasM.append(consulta)
-
-    print('\n'.join(str(consulta) for consulta in consultasM))
+    return [consulta for consulta in _queries if consulta.mascota == mascota]
 
 
 def registered_pets():
