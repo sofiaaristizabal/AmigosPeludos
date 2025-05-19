@@ -6,6 +6,7 @@ import pyfiglet
 import typer
 from rich import print
 from rich.table import Table
+import time
 
 
 def main():
@@ -34,13 +35,29 @@ def main():
 
             match selected_option:
                 case 1:
-                    menus.registar_mascota()
+                    try:
+                        menus.registar_mascota()
+                    except ValueError as e:
+                        print(f"[bold red]\nSe ha producido un error: {e}[/bold red]")
+                        print("Por favor vuelvalo a intentar")
+                        time.sleep(2)
                 case 2:
-                    menus.registar_consulta()
+                    try:
+                        menus.registar_consulta()
+                    except ValueError as e:
+                        print(f"[bold red]\nSe ha producido un error: {e}[/bold red]")
+                        print("Por favor vuelvalo a intentar")
+                        time.sleep(2)
                 case 3:
-                    menus.list_all_pets()
+                        menus.list_all_pets()
+                    
                 case 4:
-                    menus.pets_appointments()
+                    try:
+                        menus.pets_appointments()
+                    except ValueError as e:
+                        print(f"[bold red]\nSe ha producido un error: {e}[/bold red]")
+                        print("Por favor vuelvalo a intentar")
+                        time.sleep(2)
 
                 case 5:
                     if typer.confirm("¿Está seguro de que desea salir?"):

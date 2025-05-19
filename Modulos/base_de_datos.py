@@ -58,6 +58,9 @@ def find_owner(nombre_owner, telefono) -> Owner | None:
 
 def query_by_pet(nombre_mascota, nombre_owner):
     mascota = find_pet(nombre_mascota, nombre_owner)
+    if not mascota:
+        raise ValueError(f"Mascota con nombre '{nombre_mascota}' y dueno '{nombre_owner}' no encontrada")
+    
     return [consulta for consulta in _queries if consulta.mascota == mascota]
 
 

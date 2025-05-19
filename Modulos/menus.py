@@ -44,7 +44,7 @@ def registrar_dueno() -> Owner:
     nombre = typer.prompt('\nIngrese el nombre del dueño de la mascota')
     numero = typer.prompt('\nIngrese el numero telefonico del dueño de la mascota')
     if not verify_number(numero):
-        raise ValueError('Número invalido')
+        raise ValueError('Número de celular invalido')
     
     direccion = typer.prompt('\nIngrese la direccion del dueño de la mascota')
 
