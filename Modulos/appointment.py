@@ -1,4 +1,4 @@
-from Modulos.Pet import Pet
+from Modulos.pet import Pet
 
 class Query:
 

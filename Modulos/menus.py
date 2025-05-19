@@ -4,8 +4,8 @@ import pyfiglet
 from rich.table import Table
 import typer
 from rich.console import Console
-from Modulos.Owner import Owner
-from Modulos.Pet import Pet
+from Modulos.owner import Owner
+from Modulos.pet import Pet
 from Modulos.appointment import Query
 from Modulos.checker import verify_date, verify_number
 from Modulos.base_de_datos import add_pet, add_owner, find_pet, add_query, find_owner, query_by_pet
