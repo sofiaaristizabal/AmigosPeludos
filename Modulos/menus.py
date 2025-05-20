@@ -13,6 +13,58 @@ from Modulos.checker import check_valid_option
 from rich import print
 import time
 
+def main_menu():
+    limpiar_terminal()
+    print("=" * 100)
+    print(pyfiglet.figlet_format("MENU PRINCIPAL"))
+    print("=" * 100)
+
+    table = Table("Comando", "Descripción")
+    table.add_row("1", "Registrar mascota")
+    table.add_row("2", "Registrar consulta")
+    table.add_row("3", "Listar mascotas")
+    table.add_row("4", "Ver historial de consultas de una mascota específica")
+    table.add_row("5", "Salir de la aplicación")
+
+    print(table)
+    print("=" * 100)
+
+    user_input = typer.prompt("Seleccione una opción [1-5]")
+
+    while not (selected_option := check_valid_option(user_input, 1, 5)):
+        print("\nLa Opción seleccionada no es valida, vuelve a intentar")
+        user_input = typer.prompt("Seleccione una opcion [1-5]")
+
+    match selected_option:
+        case 1:
+            try:
+                registar_mascota()
+            except ValueError as e:
+                print(f"[bold red]\nSe ha producido un error: {e}[/bold red]")
+                print("Por favor vuelvalo a intentar")
+                time.sleep(2)
+        case 2:
+            try:
+                registar_consulta()
+            except ValueError as e:
+                print(f"[bold red]\nSe ha producido un error: {e}[/bold red]")
+                print("Por favor vuelvalo a intentar")
+                time.sleep(2)
+        case 3:
+                list_all_pets()
+            
+        case 4:
+            try:
+                pets_appointments()
+            except ValueError as e:
+                print(f"[bold red]\nSe ha producido un error: {e}[/bold red]")
+                print("Por favor vuelvalo a intentar")
+                time.sleep(2)
+
+        case 5:
+            if typer.confirm("¿Está seguro de que desea salir?"):
+                raise typer.Exit(code = 1)
+
 
 def list_all_pets():
     limpiar_terminal()
