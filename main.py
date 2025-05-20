@@ -1,23 +1,18 @@
-from Modulos.base_de_datos import registered_pets, query_by_pet
-from Modulos.clean_terminal import limpiar_terminal
-from Modulos.checker import check_valid_option
+from dotenv import load_dotenv
+load_dotenv()  # Load before importing for the imports to indeed use the environment variables
+
 from Modulos.menus import main_menu
-import pyfiglet
 import typer
 from rich import print
-from rich.table import Table
 import time
 from logging_config import set_up_logger
-from dotenv import load_dotenv
-
-load_dotenv()
 
 logger = set_up_logger(__name__, file_name="app_life_time.log")
 
 def main():
     logger.info("Program has been started")
     
-    print("[bold]Sabemos que hay que poner el `.env` en el `.gitignore`, " \
+    print("[bold]Sabemos que hay que poner el `.env` y los logs en el `.gitignore` por seguridad, " \
     "solo que por facilidad de calificacion, lo dejamos ahi[/bold]")
     time.sleep(3)
 
@@ -26,7 +21,7 @@ def main():
     try:
         while True:
             main_menu()
-    except typer.Exit as e:
+    except typer.Exit:
         logger.info(f"Program ended, time spent: {format(time.perf_counter() - start_time, '.3f')} seconds")
         print(f"[bold green]Salida exitosa[/bold green]")
 

@@ -7,7 +7,7 @@ def set_up_logger(
         file_name:str="general_logs.log", 
         file_mode:str="a", 
         format:str="%(asctime)s -- %(levelname)s -- %(module)s -- %(message)s"
-        ):
+        ) -> logging.Logger:
     log_level = os.getenv("LOGGING_LEVEL", "WARNING").upper()  # Get the name of the level
     log_level = getattr(logging, log_level, logging.WARNING)  # Get the attribute specified, else, 
         # default to warning
@@ -15,7 +15,7 @@ def set_up_logger(
     logger.setLevel(log_level)
 
     if not logger.hasHandlers():  # In case an already created logger was called
-        handler = logging.FileHandler(file_name, mode=file_mode)
+        handler = logging.FileHandler(f"logs/{file_name}", mode=file_mode)
         formatter = logging.Formatter(format)
         handler.setFormatter(formatter)
         logger.addHandler(handler)

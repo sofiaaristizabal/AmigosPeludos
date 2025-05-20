@@ -12,8 +12,23 @@ from Modulos.base_de_datos import add_pet, add_owner, find_pet, add_query, find_
 from Modulos.checker import check_valid_option
 from rich import print
 import time
+from logging_config import set_up_logger
+
+menus_time_logger = set_up_logger("time_spent_logger", file_name="menus_time_spent.log")
+general_logger = set_up_logger(__name__, file_name="run_time_logger.log")
+
+def execute_function(function):
+    try:
+        function()
+    except ValueError as e:
+        print(f"[bold red]\nSe ha producido un error: {e}[/bold red]")
+        print("Por favor vuelvalo a intentar")
+        time.sleep(2)
+        general_logger.error(e)
+    
 
 def main_menu():
+    start_time = time.perf_counter()
     limpiar_terminal()
     print("=" * 100)
     print(pyfiglet.figlet_format("MENU PRINCIPAL"))
@@ -32,41 +47,32 @@ def main_menu():
     user_input = typer.prompt("Seleccione una opción [1-5]")
 
     while not (selected_option := check_valid_option(user_input, 1, 5)):
-        print("\nLa Opción seleccionada no es valida, vuelve a intentar")
+        print("\nLa opción seleccionada no es valida, vuelve a intentar")
+        general_logger.warning("User selected a wrong option")
         user_input = typer.prompt("Seleccione una opcion [1-5]")
 
+    menus_time_logger.info(f"time spent in main_menu: {format(time.perf_counter() - start_time, '.3f')}")
     match selected_option:
         case 1:
-            try:
-                registar_mascota()
-            except ValueError as e:
-                print(f"[bold red]\nSe ha producido un error: {e}[/bold red]")
-                print("Por favor vuelvalo a intentar")
-                time.sleep(2)
+            execute_function(registar_mascota)
+            
         case 2:
-            try:
-                registar_consulta()
-            except ValueError as e:
-                print(f"[bold red]\nSe ha producido un error: {e}[/bold red]")
-                print("Por favor vuelvalo a intentar")
-                time.sleep(2)
+            execute_function(registar_consulta)
+            
         case 3:
-                list_all_pets()
+            execute_function(list_all_pets)
             
         case 4:
-            try:
-                pets_appointments()
-            except ValueError as e:
-                print(f"[bold red]\nSe ha producido un error: {e}[/bold red]")
-                print("Por favor vuelvalo a intentar")
-                time.sleep(2)
+            execute_function(pets_appointments)
+            
 
         case 5:
             if typer.confirm("¿Está seguro de que desea salir?"):
                 raise typer.Exit(code = 1)
-
+    
 
 def list_all_pets():
+    start_time = time.perf_counter()
     limpiar_terminal()
 
     print("=" * 100)
@@ -80,10 +86,12 @@ def list_all_pets():
     console = Console()
     console.print(pets_table)
 
+    menus_time_logger.info(f"time spent in list_all_pets: {format(time.perf_counter() - start_time, '.3f')}")
     typer.prompt("Escriba cualquier cosa para volver al menu principal")
 
 
 def registrar_dueno() -> Owner:
+    start_time = time.perf_counter()
     print("=" * 100)
     print(pyfiglet.figlet_format("Registro de dueno"))
     print("=" * 100)
@@ -106,10 +114,13 @@ def registrar_dueno() -> Owner:
 
     owner = Owner(nombre, numero, direccion)
     add_owner(owner)
+    general_logger.info(f"An owner has been registered: {owner}")
+    menus_time_logger.info(f"time spent in registrar_dueno: {format(time.perf_counter() - start_time, '.3f')}")
     return owner
 
 
 def registar_mascota():
+    start_time = time.perf_counter()
     limpiar_terminal()
 
     print("=" * 100)
@@ -163,11 +174,14 @@ def registar_mascota():
     
     mascota = Pet(nombre_mascota, especie, fecha_de_nacimiento, raza, owner)
     add_pet(mascota)
+    general_logger.info(f"A mascot has been registered: {mascota}")
     print("[bold green]Se realizo exitosamente el registro de la mascota[/bold green]")
     time.sleep(2)
+    menus_time_logger.info(f"time spent in registrar_mascota: {format(time.perf_counter() - start_time, '.3f')}")
 
 
 def registar_consulta():
+    start_time = time.perf_counter()
     limpiar_terminal()
 
     print("=" * 100)
@@ -208,11 +222,14 @@ def registar_consulta():
 
     consulta = Query(fecha, motivo, diagnostico, mascota)
     add_query(consulta)
+    general_logger.info(f"An appointment has been registered {consulta}")
     print("[bold green]Se realizo exitosamente el registro de la consulta[/bold green]")
     time.sleep(2)
+    menus_time_logger.info(f"time spent in registrar consulta: {format(time.perf_counter() - start_time, '.3f')}")
 
 
 def pets_appointments():
+    start_time = time.perf_counter()
     limpiar_terminal()
 
     print("=" * 100)
@@ -223,9 +240,16 @@ def pets_appointments():
     nombre_owner = typer.prompt("\nIngrese el nombre del dueño")
 
     tabla_consulta = Table("Mascota", "Nombre Dueno", "Fecha", "Motivo", "Diagnostico")
-    for consulta in query_by_pet(nombre_mascota, nombre_owner):
-        tabla_consulta.add_row(consulta.mascota.nombre, consulta.mascota.owner.nombre, consulta.fecha, consulta.motivo, consulta.diagnostico)
+    appointments = query_by_pet(nombre_mascota, nombre_owner)
 
-    print("\n")
-    print(tabla_consulta)
+    if len(appointments) == 0:
+        print("La mascota no tiene consultas registradas")
+    else:
+        for consulta in appointments:
+            tabla_consulta.add_row(consulta.mascota.nombre, consulta.mascota.owner.nombre, consulta.fecha, consulta.motivo, consulta.diagnostico)
+
+        print("\n")
+        print(tabla_consulta)
+
     typer.prompt("Escriba cualquier cosa para volver al menu principal")
+    menus_time_logger.info(f"time spent in pets_appointments: {format(time.perf_counter() - start_time, '.3f')}")

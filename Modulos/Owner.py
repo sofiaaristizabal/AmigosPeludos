@@ -6,6 +6,5 @@ class Owner:
         self.direccion = direccion
 
     def __str__(self):
-        print("being called")
         return self.nombre
 

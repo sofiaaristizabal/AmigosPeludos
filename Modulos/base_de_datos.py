@@ -1,7 +1,9 @@
 from Modulos.pet import Pet
 from Modulos.owner import Owner
 from Modulos.appointment import Query
+from logging_config import set_up_logger
 
+general_logger = set_up_logger(__name__, file_name="run_time_logger.log")
 
 _owners: list[Owner] = [
     Owner('Santiago Yepes', '3757353838', 'Siao Paulinho'),
