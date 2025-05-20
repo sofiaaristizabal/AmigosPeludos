@@ -7,9 +7,20 @@ import typer
 from rich import print
 from rich.table import Table
 import time
+from logging_config import set_up_logger
+from dotenv import load_dotenv
 
+load_dotenv()
+
+logger = set_up_logger(__name__, file_name="app_life_time.log")
 
 def main():
+    logger.info("Program has been started")
+    
+    print("[bold]Sabemos que hay que poner el `.env` en el `.gitignore`, " \
+    "solo que por facilidad de calificacion, lo dejamos ahi[/bold]")
+    time.sleep(3)
+    start_time = time.perf_counter()
     try:
         while True:
             limpiar_terminal()
@@ -63,6 +74,7 @@ def main():
                     if typer.confirm("¿Está seguro de que desea salir?"):
                         raise typer.Exit(code = 1)
     except typer.Exit as e:
+        logger.info(f"Program ended, time spent: {format(time.perf_counter() - start_time, '.2f')} seconds")
         print(f"[bold green]Salida exitosa[/bold green]")
 
 

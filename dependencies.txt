@@ -3,3 +3,4 @@ pyfiglet
 rich
 typer
 cowsay
+python-dotenv

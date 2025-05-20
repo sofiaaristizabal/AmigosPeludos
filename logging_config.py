@@ -9,7 +9,6 @@ def set_up_logger(
         format:str="%(asctime)s -- %(levelname)s -- %(module)s -- %(message)s"
         ):
     log_level = os.getenv("LOGGING_LEVEL", "WARNING").upper()  # Get the name of the level
-    print(log_level)
     log_level = getattr(logging, log_level, logging.WARNING)  # Get the attribute specified, else, 
         # default to warning
     logger = logging.getLogger(name)
