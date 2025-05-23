@@ -3,12 +3,13 @@ from Modulos.owner import Owner
 
 class Pet:
     # Constructor
-    def __init__(self, nombre: str, especie: str, fecha_de_nacimiento: str, raza: str, owner: Owner):
+    def __init__(self, nombre: str, especie: str, fecha_de_nacimiento: str, raza: str, owner: Owner, id: int):
         self.nombre = nombre
         self.especie = especie
         self.fecha_de_nacimiento = fecha_de_nacimiento
         self.raza = raza
         self.owner = owner
+        self.id = id  # TODO when creating a pet, make a method to get the id
 
     """
     edad:
@@ -54,3 +55,12 @@ class Pet:
                 self.fecha_de_nacimiento == other.fecha_de_nacimiento)
 
 
+    def to_dict(self):
+        return dict({
+            "nombre": self.nombre,
+            "especie": self.especie,
+            "fecha_de_nacimiento": self.fecha_de_nacimiento,
+            "raza": self.raza,
+            "owner": self.owner.id,
+            "id": self.id,
+        })

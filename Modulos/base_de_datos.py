@@ -17,7 +17,7 @@ _pets: list[Pet] = [
     Pet('Pollo', 'Bulldog', '23/09/2020', 'Bulldog', _owners[2])
 ]
 
-_queries: list[Query] = [
+_appointments: list[Query] = [
     Query('11/02/15', 'Vaccination', 'Teeth infection', _pets[2]),
     Query('12/03/16', 'General Checkup', 'Healthy', _pets[0]),
     Query('15/04/17', 'Deworming', 'Mild worms', _pets[1]),
@@ -31,6 +31,18 @@ _queries: list[Query] = [
 ]
 
 
+def get_owners():
+    return _owners.copy()
+
+
+def get_pets():
+    return _pets.copy()
+
+
+def get_appointments():
+    return _appointments.copy()
+
+
 def add_pet(mascota):
     _pets.append(mascota)
 
@@ -40,7 +52,7 @@ def add_owner(owner):
 
 
 def add_query(queries):
-    _queries.append(queries)
+    _appointments.append(queries)
 
 
 def find_pet(nombre_mascota, nombre_owner):
@@ -63,15 +75,20 @@ def query_by_pet(nombre_mascota, nombre_owner):
     if not mascota:
         raise ValueError(f"Mascota con nombre '{nombre_mascota}' y dueno '{nombre_owner}' no encontrada")
     
-    return [consulta for consulta in _queries if consulta.mascota == mascota]
+    return [consulta for consulta in _appointments if consulta.mascota == mascota]
 
 
 def registered_pets():
     print('\n'.join(str(mascota) for mascota in _pets))
 
+
 def get_all_pets():
     return _pets.copy()
 
 
-    
-    
+def get_next_pet_id():
+    pass  # TODO
+
+
+def get_next_owner_id():
+    pass  # TODO
