@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()  # Load before importing for the imports to indeed use the environment variables
 
-from Modulos.menus import main_menu
+from Modulos.menus import Menus
 import typer
 from rich import print
 import time
@@ -18,9 +18,11 @@ def main():
 
     start_time = time.perf_counter()
 
+    app = Menus()
+
     try:
         while True:
-            main_menu()
+            app.main_menu()
     except typer.Exit:
         logger.info(f"Program ended, time spent: {format(time.perf_counter() - start_time, '.3f')} seconds")
         print(f"[bold green]Salida exitosa[/bold green]")
