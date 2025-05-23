@@ -6,7 +6,7 @@ import typer
 from rich.console import Console
 from Modulos.owner import Owner
 from Modulos.pet import Pet
-from Modulos.appointment import Query
+from Modulos.appointment import Appointment
 from Modulos.checker import verify_date, verify_number
 from Modulos.base_de_datos import Data_Base
 from Modulos.checker import check_valid_option
@@ -116,7 +116,7 @@ class Menus():
         tabla_dueno.add_row(nombre, numero, direccion)
         print(tabla_dueno)
 
-        owner = Owner(nombre, numero, direccion)
+        owner = Owner(nombre, numero, direccion, self.database.get_next_owner_id())
         self.database.add_owner(owner)
         general_logger.info(f"An owner has been registered: {owner}")
         menus_time_logger.info(f"time spent in registrar_dueno: {format(time.perf_counter() - start_time, '.3f')}")
@@ -176,7 +176,8 @@ class Menus():
             print("[/bold red]No se realizo el registro de la mascota[/bold red]")
             return
         
-        mascota = Pet(nombre_mascota, especie, fecha_de_nacimiento, raza, owner)
+        mascota = Pet(nombre_mascota, especie, fecha_de_nacimiento, 
+                      raza, owner, self.database.get_next_pet_id())
         self.database.add_pet(mascota)
         general_logger.info(f"A mascot has been registered: {mascota}")
         print("[bold green]Se realizo exitosamente el registro de la mascota[/bold green]")
@@ -224,7 +225,7 @@ class Menus():
             print("[/bold red]No se realizo el registro de la consulta[/bold red]")
             return
 
-        consulta = Query(fecha, motivo, diagnostico, mascota)
+        consulta = Appointment(fecha, motivo, diagnostico, mascota)
         self.database.add_query(consulta)
         general_logger.info(f"An appointment has been registered {consulta}")
         print("[bold green]Se realizo exitosamente el registro de la consulta[/bold green]")

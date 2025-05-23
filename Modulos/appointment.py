@@ -1,6 +1,6 @@
 from Modulos.pet import Pet
 
-class Query:
+class Appointment:
     def __init__(self, fecha, motivo: str, diagnostico: str, mascota: Pet):
         self.fecha = fecha
         self.motivo = motivo
