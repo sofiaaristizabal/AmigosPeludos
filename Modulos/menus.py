@@ -225,7 +225,7 @@ class Menus():
             print("[/bold red]No se realizo el registro de la consulta[/bold red]")
             return
 
-        consulta = Appointment(fecha, motivo, diagnostico, mascota)
+        consulta = Appointment(fecha, motivo, diagnostico, mascota, self.database.get_next_appointment_id())
         self.database.add_query(consulta)
         general_logger.info(f"An appointment has been registered {consulta}")
         print("[bold green]Se realizo exitosamente el registro de la consulta[/bold green]")

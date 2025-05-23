@@ -1,11 +1,12 @@
 from Modulos.pet import Pet
 
 class Appointment:
-    def __init__(self, fecha, motivo: str, diagnostico: str, mascota: Pet):
+    def __init__(self, fecha, motivo: str, diagnostico: str, mascota: Pet, id: int):
         self.fecha = fecha
         self.motivo = motivo
         self.diagnostico = diagnostico
         self.mascota = mascota
+        self.id = id
 
 
     def __str__(self):
