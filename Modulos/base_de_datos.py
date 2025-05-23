@@ -78,7 +78,18 @@ class Data_Base():
         return self._pets.copy()
 
     def get_next_pet_id(self,):
-        pass  # TODO
+        max_id = float("-inf")
+        for pet in self._pets:
+            if pet.id > max_id:
+                max_id = pet.id
+
+        return max_id + 1
+
 
     def get_next_owner_id(self,):
-        pass  # TODO
+        max_id = float("-inf")
+        for owner in self._owners:
+            if owner.id > max_id:
+                max_id = owner.id
+
+        return max_id + 1
