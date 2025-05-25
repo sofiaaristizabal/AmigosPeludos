@@ -4,7 +4,7 @@ class Owner:
         self.nombre = nombre
         self.telefono = telefono
         self.direccion = direccion
-        self.id = id  # TODO when creating an Owner add a way to get the id of the owner
+        self.id = id
 
 
     def __str__(self):

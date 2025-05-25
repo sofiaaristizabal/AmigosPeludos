@@ -9,7 +9,7 @@ class Pet:
         self.fecha_de_nacimiento = fecha_de_nacimiento
         self.raza = raza
         self.owner = owner
-        self.id = id  # TODO when creating a pet, make a method to get the id
+        self.id = id
 
     """
     edad:
