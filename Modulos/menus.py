@@ -51,9 +51,9 @@ class Menus():
         print(table)
         print("=" * 100)
 
-        user_input = typer.prompt("Seleccione una opción [1-5]")
+        user_input = typer.prompt("Seleccione una opción [1-6]")
 
-        while not (selected_option := check_valid_option(user_input, 1, 5)):
+        while not (selected_option := check_valid_option(user_input, 1, 6)):
             print("\nLa opción seleccionada no es valida, vuelve a intentar")
             general_logger.warning("User selected a wrong option")
             user_input = typer.prompt("Seleccione una opcion [1-5]")

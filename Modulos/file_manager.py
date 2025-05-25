@@ -1,9 +1,9 @@
 import json
 import csv
-from base_de_datos import Data_Base
-from appointment import Appointment
-from owner import Owner
-from pet import Pet
+from .base_de_datos import Data_Base
+from .appointment import Appointment
+from .owner import Owner
+from .pet import Pet
 from logging_config import set_up_logger
 import logging
 
@@ -23,9 +23,9 @@ class File_Manager():
 
 
     def load_database(database: Data_Base) -> None:
-        File_Manager._load_pets()
-        File_Manager._load_appointments()
-        File_Manager._load_owners()
+        File_Manager._load_pets(database)
+        File_Manager._load_appointments(database)
+        File_Manager._load_owners(database)
 
 
     def _load_pets(database: Data_Base) -> None:
