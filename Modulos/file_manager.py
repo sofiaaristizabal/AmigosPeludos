@@ -45,7 +45,7 @@ class File_Manager():
                             row.get("fecha_de_nacimiento"),
                             row.get("raza"),
                             database.find_owner_by_id(int(row.get("owner"))),
-                            row.get("id")
+                            int(row.get("id"))
                         )
                     except Owner_Not_Found_Error:
                         logger.error(f"The PET with id {row.get('id')} couldn't get loaded")
@@ -74,7 +74,7 @@ class File_Manager():
                     result["motivo"],
                     result["diagnostico"],
                     database.find_pet_by_id(int(result["id_mascota"])),
-                    result["id"]
+                    int(result["id"])
                 )
 
                 database.add_query(appointment)
@@ -97,7 +97,7 @@ class File_Manager():
                         row.get("nombre"),
                         row.get("telefono"),
                         row.get("direccion"),
-                        row.get("id")
+                        int(row.get("id"))
                     )
 
                     database.add_owner(owner)
