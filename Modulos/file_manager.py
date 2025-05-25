@@ -1,5 +1,6 @@
 import json
 import csv
+import os
 from .base_de_datos import Data_Base
 from .appointment import Appointment
 from .owner import Owner
@@ -61,7 +62,26 @@ class File_Manager():
 
 
     def _load_appointments(database: Data_Base, path: str="Datos", appointment_folder: str="\\appointments") -> None:
-        pass
+        number_appointment_count = 0
+        for file_name in os.listdir(path + appointment_folder):
+            if file_name == "placeholder.txt":
+                continue
+
+            with open(path + appointment_folder + "\\" + file_name, "r") as file:
+                result = json.load(file)
+                appointment = Appointment(
+                    result["fecha"],
+                    result["motivo"],
+                    result["diagnostico"],
+                    database.find_pet_by_id(int(result["id_mascota"])),
+                    result["id"]
+                )
+
+                database.add_query(appointment)
+                number_appointment_count += 1
+                logger.debug(f"APPOINTMENT with id: {appointment.id} LOADED")
+
+            logger.info(f"APPOINTMENTS LOADED, count: {number_appointment_count}")
 
 
     def _load_owners(database: Data_Base, path: str="Datos", owners_file: str="\\Owners.csv") -> None:
