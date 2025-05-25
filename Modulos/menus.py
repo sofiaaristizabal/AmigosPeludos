@@ -1,5 +1,4 @@
 from Modulos.clean_terminal import limpiar_terminal
-import Modulos.base_de_datos
 import pyfiglet
 from rich.table import Table
 import typer
@@ -93,7 +92,7 @@ class Menus():
         print("=" * 100)
 
         pets_table = Table("Nombre", "Especie", "Fecha de nacimiento", "Raza", "Dueño")
-        for pet in Modulos.base_de_datos.get_all_pets():
+        for pet in self.database.get_pets():
             pets_table.add_row(pet.nombre, pet.especie, pet.fecha_de_nacimiento, pet.raza, pet.owner.nombre)
         
         console = Console()
