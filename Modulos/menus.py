@@ -13,6 +13,7 @@ from Modulos.checker import check_valid_option
 from rich import print
 import time
 from logging_config import set_up_logger
+from file_manager import File_Manager
 
 menus_time_logger = set_up_logger("time_spent_logger", file_name="menus_time_spent.log")
 general_logger = set_up_logger(__name__, file_name="run_time_logger.log")
@@ -20,6 +21,7 @@ general_logger = set_up_logger(__name__, file_name="run_time_logger.log")
 class Menus():
     def __init__(self):
         self.database = Data_Base()
+        File_Manager.load_database(self.database)  # Load the database at the start
 
     def execute_function(self,function):
         try:
@@ -43,7 +45,8 @@ class Menus():
         table.add_row("2", "Registrar consulta")
         table.add_row("3", "Listar mascotas")
         table.add_row("4", "Ver historial de consultas de una mascota específica")
-        table.add_row("5", "Salir de la aplicación")
+        table.add_row("5", "Guardar los datos")
+        table.add_row("6", "Salir de la aplicación")
 
         print(table)
         print("=" * 100)
@@ -68,10 +71,16 @@ class Menus():
                 
             case 4:
                 self.execute_function(self.pets_appointments)
-                
 
-            case 5:
+            case 6:
+                print("[bold]Guardando base de datos[/bold]")
+                File_Manager.save_database(self.database)
+                print("[bold green]La base de datos fue exitosamente guardada[/bolg green]")
+                time.sleep(1.3)
+
+            case 6:
                 if typer.confirm("¿Está seguro de que desea salir?"):
+                    File_Manager.save_database(self.database)  # Always save the database at the end
                     raise typer.Exit(code = 1)
         
 
