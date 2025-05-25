@@ -65,7 +65,29 @@ class File_Manager():
 
 
     def _load_owners(database: Data_Base, path: str="Datos", owners_file: str="\\Owners.csv") -> None:
-        pass
+        logger.info("Reading the owners into the database")
+        try:
+            with open(path + owners_file, 'r', newline='') as file:
+                reader = csv.DictReader(file)
+                
+                number_owners_read = 0
+
+                for row in reader:
+                    owner = Owner(
+                        row.get("nombre"),
+                        row.get("telefono"),
+                        row.get("direccion"),
+                        row.get("id")
+                    )
+
+                    database.add_owner(owner)
+                    number_owners_read += 1
+                    logger.debug(f"owner with id: {owner.id}, has been loaded")
+
+                logger.info(f"OWNERS LOADED, count: {number_owners_read}")
+        
+        except FileNotFoundError:
+            logger.erro("OWNERS NOT READ, the CSV file for the owners couldn't be found")
     
 
     def _save_pets(pets: list[Pet], path: str="Datos", pets_file: str="\\Pets.csv") -> None:
