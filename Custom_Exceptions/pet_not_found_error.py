@@ -5,7 +5,7 @@ class Pet_Not_Found_Error(Exception):
         self.pet_id = pet_id
         self.message = message
         if pet_id:
-            self.message = f"Owner with ID '{pet_id}' not found."
+            self.message = f"Pet with ID '{pet_id}' not found."
         super().__init__(self.message)
 
     def __str__(self):
