@@ -13,7 +13,7 @@ from Modulos.checker import check_valid_option
 from rich import print
 import time
 from logging_config import set_up_logger
-from file_manager import File_Manager
+from Modulos.file_manager import File_Manager
 
 menus_time_logger = set_up_logger("time_spent_logger", file_name="menus_time_spent.log")
 general_logger = set_up_logger(__name__, file_name="run_time_logger.log")

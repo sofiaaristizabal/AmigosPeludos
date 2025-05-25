@@ -26,7 +26,7 @@ class Data_Base():
             Appointment('20/05/18', 'Vaccination', 'Allergic reaction', self._pets[2], 4),
             Appointment('22/06/19', 'Dental Cleaning', 'Tartar buildup', self._pets[0], 5),
             Appointment('30/07/20', 'Surgery', 'Neutering', self._pets[1], 6),
-            Appointment('10/08/21', 'X-ray', 'Limping', self._pets[2]), 7,
+            Appointment('10/08/21', 'X-ray', 'Limping', self._pets[2], 7),
             Appointment('14/09/22', 'Blood Test', 'Routine check', self._pets[0], 8),
             Appointment('18/10/23', 'Vaccination', 'Healthy', self._pets[1], 9),
             Appointment('25/11/24', 'General Checkup', 'Minor cold', self._pets[2], 10)
