@@ -2,6 +2,7 @@ from Modulos.pet import Pet
 from Modulos.owner import Owner
 from Modulos.appointment import Appointment
 from logging_config import set_up_logger
+from Custom_Exceptions.owner_not_found_error import Owner_Not_Found_Error
 
 general_logger = set_up_logger(__name__, file_name="run_time_logger.log")
 
@@ -31,6 +32,13 @@ class Data_Base():
             Appointment('18/10/23', 'Vaccination', 'Healthy', self._pets[1], 9),
             Appointment('25/11/24', 'General Checkup', 'Minor cold', self._pets[2], 10)
         ]
+
+    def find_owner_by_id(self, id: int):
+        for owner in self._owners:
+            if owner.id == id:
+                return owner
+            
+        raise Owner_Not_Found_Error(id)
 
     def get_owners(self,):
         return self._owners.copy()
@@ -73,9 +81,6 @@ class Data_Base():
 
     def registered_pets(self,):
         print('\n'.join(str(mascota) for mascota in self._pets))
-
-    def get_all_pets(self,):
-        return self._pets.copy()
 
     def get_next_pet_id(self,):
         if len(self._pets) == 0:
