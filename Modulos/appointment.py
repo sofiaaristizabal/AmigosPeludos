@@ -19,4 +19,5 @@ class Appointment:
             "motivo": self.motivo,
             "diagnostico": self.diagnostico,
             "id_mascota": self.mascota.id,
+            "id": self.id
         })
