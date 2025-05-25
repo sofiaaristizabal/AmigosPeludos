@@ -40,9 +40,6 @@ class Data_Base():
 
 
     def find_owner_by_id(self, id: int):
-        print("esta es la lista de duenos en este momento")
-        for owner in self._owners:
-            print(owner)
         for owner in self._owners:
             if owner.id == id:
                 return owner
