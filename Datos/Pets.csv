@@ -1,1 +1,4 @@
-"nombre","especie","fecha_de_nacimiento","raza","owner","id"
+nombre,especie,fecha_de_nacimiento,raza,owner,id
+Lucas,French Poodle,11/02/2013,French Poodle,1,1
+Ilo,Golden Retriever,05/07/2018,Golden Retriever,2,2
+Pollo,Bulldog,23/09/2020,Bulldog,3,3

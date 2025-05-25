@@ -72,10 +72,10 @@ class Menus():
             case 4:
                 self.execute_function(self.pets_appointments)
 
-            case 6:
+            case 5:
                 print("[bold]Guardando base de datos[/bold]")
                 File_Manager.save_database(self.database)
-                print("[bold green]La base de datos fue exitosamente guardada[/bolg green]")
+                print("[bold green]La base de datos fue exitosamente guardada[/bold green]")
                 time.sleep(1.3)
 
             case 6:

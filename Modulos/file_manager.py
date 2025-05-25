@@ -40,11 +40,11 @@ class File_Manager():
         pass
     
 
-    def _save_pets(pets: list[Pet], path: str=".\\..\\Datos", pets_file: str="Pets.csv") -> None:
+    def _save_pets(pets: list[Pet], path: str="Datos", pets_file: str="\\Pets.csv") -> None:
         logger.info("Saving the pets")
         # w because we want to reset the database each time
         try:
-            with open(path + pets_file, 'w') as csvfile:
+            with open(path + pets_file, 'w', newline="") as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow(pets[0].to_dict().keys())  # Set the column names
                 for pet in pets:  # Enter all the objets
@@ -54,10 +54,10 @@ class File_Manager():
             logger.error("The CSV file for the pets couldn't be found, pets were not saved")
 
 
-    def _save_appointments(appointments: list[Appointment], path: str=".\\..\\Datos", appointment_folder: str="appoinments") -> None:
+    def _save_appointments(appointments: list[Appointment], path: str="Datos", appointment_folder: str="\\appointments") -> None:
         logger.info("saving the appoinments")
         for appointment in appointments:
-            json_val = File_Manager._convert_to_json(appointment)
+            json_val = File_Manager._convert_to_json(appointment.to_dict())
             try: 
                 with open(path + appointment_folder + f"\\apointment_{appointment.id}.json", "w") as file:
                     file.write(json_val)
@@ -66,11 +66,11 @@ class File_Manager():
                 logger.error(f"Couldnt save appointment with id: {appointment.id}, error message: {e}")
 
 
-    def _save_owners(owners: list[Owner], path: str=".\\..\\Datos", owners_file: str="Owners.csv") -> None:
+    def _save_owners(owners: list[Owner], path: str="Datos", owners_file: str="\\Owners.csv") -> None:
         logger.info("Saving the owners")
         # w because we want to reset the database each time
         try:
-            with open(path + owners_file, 'w') as csvfile:
+            with open(path + owners_file, "w", newline="") as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow(owners[0].to_dict().keys())  # Set the column names
                 for owner in owners:  # Enter all the objets
