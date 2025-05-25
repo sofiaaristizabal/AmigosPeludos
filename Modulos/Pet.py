@@ -35,7 +35,7 @@ class Pet:
         return edad
 
     def __str__(self):
-        return f'Mascota: {self.nombre}, edad:{self.age}, dueño: {self.owner.nombre} '
+        return f'Mascota: {self.nombre}, edad:{self.age}, dueño: {self.owner.nombre}, id: {self.id} '
 
     """
     __eq__: Compares if two objects type Mascota are equal

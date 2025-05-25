@@ -8,7 +8,7 @@ class Owner:
 
 
     def __str__(self):
-        return self.nombre
+        return f"Owner(nombre='{self.nombre}', telefono='{self.telefono}', direccion='{self.direccion}', id={self.id})"
     
 
     def to_dict(self):
