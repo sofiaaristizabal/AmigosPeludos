@@ -48,7 +48,6 @@ class Data_Base():
     
 
     def find_pet_by_id(self, id: int):
-        print(self._pets)
         for pet in self._pets:
             if pet.id == id:
                 return pet
