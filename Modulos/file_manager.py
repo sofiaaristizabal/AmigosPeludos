@@ -62,6 +62,7 @@ class File_Manager():
 
 
     def _load_appointments(database: Data_Base, path: str="Datos", appointment_folder: str="\\appointments") -> None:
+        logger.info("Reading the appointments into the database")
         number_appointment_count = 0
         for file_name in os.listdir(path + appointment_folder):
             if file_name == "placeholder.txt":
