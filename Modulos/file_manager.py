@@ -108,7 +108,7 @@ class File_Manager():
                 logger.info(f"OWNERS LOADED, count: {number_owners_read}")
         
         except FileNotFoundError:
-            logger.erro("OWNERS NOT READ, the CSV file for the owners couldn't be found")
+            logger.error("OWNERS NOT READ, the CSV file for the owners couldn't be found")
     
 
     def _save_pets(pets: list[Pet], path: str="Datos", pets_file: str="\\Pets.csv") -> None:
