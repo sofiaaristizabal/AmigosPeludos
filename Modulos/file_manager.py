@@ -81,7 +81,7 @@ class File_Manager():
                 number_appointment_count += 1
                 logger.debug(f"APPOINTMENT with id: {appointment.id} LOADED")
 
-            logger.info(f"APPOINTMENTS LOADED, count: {number_appointment_count}")
+        logger.info(f"APPOINTMENTS LOADED, count: {number_appointment_count}")
 
 
     def _load_owners(database: Data_Base, path: str="Datos", owners_file: str="\\Owners.csv") -> None:
