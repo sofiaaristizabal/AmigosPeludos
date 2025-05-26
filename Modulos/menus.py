@@ -202,7 +202,7 @@ class Menus():
         print("=" * 100)
 
         print("Recuerde que la informacion de las consultas tiene la siguiente estructura: ")
-        tabla_consulta = Table("Mascota", "Fecha", "Motivo", "Diagnostico", "Nombre de la Mascota")
+        tabla_consulta = Table("Mascota", "Nombre Dueno", "Fecha", "Motivo", "Diagnostico")
         print(tabla_consulta)
         print("=" * 100)
 
