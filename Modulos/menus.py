@@ -171,7 +171,7 @@ class Menus():
 
             case 2:
                 print("\n" * 2)
-                owner = self.database.registrar_dueno()
+                owner = self.registrar_dueno()
                 print("\n" * 2)
 
         tabla_mascota.add_row(nombre_mascota, fecha_de_nacimiento, especie, raza, owner.nombre)
@@ -211,7 +211,8 @@ class Menus():
         
         mascota = self.database.find_pet(nombre_mascota, nombre_owner)
         if mascota is None:
-            print("Mascota no encontrada")
+            print("[bold red]Mascota no encontrada[/bold red]")
+            time.sleep(2)
             return
 
         fecha = typer.prompt('Ingrese la fecha de la consulta (dd/mm/aaaa)')
