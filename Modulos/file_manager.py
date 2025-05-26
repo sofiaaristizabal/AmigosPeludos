@@ -7,7 +7,7 @@ from .owner import Owner
 from .pet import Pet
 from logging_config import set_up_logger
 import logging
-from Custom_Exceptions.owner_not_found_error import Owner_Not_Found_Error
+from Modulos.Custom_Exceptions.owner_not_found_error import Owner_Not_Found_Error
 
 logger: logging.Logger = set_up_logger(
         __name__,

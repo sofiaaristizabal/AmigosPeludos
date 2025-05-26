@@ -2,8 +2,8 @@ from Modulos.pet import Pet
 from Modulos.owner import Owner
 from Modulos.appointment import Appointment
 from logging_config import set_up_logger
-from Custom_Exceptions.owner_not_found_error import Owner_Not_Found_Error
-from Custom_Exceptions.pet_not_found_error import Pet_Not_Found_Error
+from Modulos.Custom_Exceptions.owner_not_found_error import Owner_Not_Found_Error
+from Modulos.Custom_Exceptions.pet_not_found_error import Pet_Not_Found_Error
 
 general_logger = set_up_logger(__name__, file_name="run_time_logger.log")
 

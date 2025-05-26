@@ -6,9 +6,9 @@ from rich.console import Console
 from Modulos.owner import Owner
 from Modulos.pet import Pet
 from Modulos.appointment import Appointment
-from Modulos.checker import verify_date, verify_number
+from Modulos.validator import verify_date, verify_number
 from Modulos.base_de_datos import Data_Base
-from Modulos.checker import check_valid_option
+from Modulos.validator import check_valid_option
 from rich import print
 import time
 from logging_config import set_up_logger
