@@ -1,0 +1,1 @@
+this file is so the logs folder is registered by git
