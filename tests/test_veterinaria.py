@@ -3,6 +3,7 @@ import os
 import json
 import csv
 import tempfile
+from datetime import datetime
 from Modulos.pet import Pet
 from Modulos.owner import Owner
 from Modulos.appointment import Appointment
@@ -35,7 +36,10 @@ class TestPet(unittest.TestCase):
     
     def test_age(self):
         """Prove age property calculation"""
-        self.assertEqual(self.pet.age, 5) # Test birthdate in 2020, now 2025
+        current_year = datetime.now().year
+        birth_year = 2020
+        expected_age = current_year - birth_year
+        self.assertEqual(self.pet.age, expected_age)
 
     def test_eq_true(self):
         """Two pets with equal data must be the same"""
@@ -60,31 +64,32 @@ class TestOwner(unittest.TestCase):
         self.assertIn("Luis", s)
         self.assertIn("474", s)
 
-    def test_to_dict(self):
-        """Verify dict of serialization"""
-        d = self.owner.to_dict()
-        self.assertEqual(d["nombre"], "Luis")
-        self.assertEqual(d["id"], 2)
-    
-    # Test Appointment
-    class TestAppointment(unittest.TestCase):
-        """Creation and to_dict"""
-        
-        def setUp(self):
-            owner = Owner("Santiago", "3007654747", "Calle 78", id=3)
-            pet = Pet("Copito", "Perro", "15/03/2019", "Pomeranian", owner, id=7)
-            self.app = Appointment("15/05/2025", "Vacunación", "OK", pet, id=100)
-        
-        def test_attributes(self):
-            """Prove basic attributes of an Appointment"""
-            self.assertEqual(self.app.motivo, "Vacunación")
-            self.assertEqual(self.app.mascota.nombre, "Copito")
+def test_to_dict(self):
+         """Verify dict of serialization"""
+         d = self.owner.to_dict()
+         self.assertEqual(d["nombre"], "Luis")
+         self.assertEqual(d["id"], 2)
 
-        def test_to_dict(self):
-            """Verify dict for JSON"""
-            d = self.app.to_dict()
-            self.assertEqual(d["id"], 100)
-            self.assertEqual(d["id_mascota"], 7)
+
+# Test Appointment
+class TestAppointment(unittest.TestCase):
+         """Creation and to_dict"""
+         
+         def setUp(self):
+             owner = Owner("Santiago", "3007654747", "Calle 78", id=3)
+             pet = Pet("Copito", "Perro", "15/03/2019", "Pomeranian", owner, id=7)
+             self.app = Appointment("15/05/2025", "Vacunación", "OK", pet, id=100)
+         
+         def test_attributes(self):
+             """Prove basic attributes of an Appointment"""
+             self.assertEqual(self.app.motivo, "Vacunación")
+             self.assertEqual(self.app.mascota.nombre, "Copito")
+
+         def test_to_dict(self):
+             """Verify dict for JSON"""
+             d = self.app.to_dict()
+             self.assertEqual(d["id"], 100)
+             self.assertEqual(d["id_mascota"], 7)
 
 # Validators and options management
 
@@ -185,10 +190,18 @@ class TestFileManager(unittest.TestCase):
         class TestLogging(unittest.TestCase):
             """Proves set_up_logger creates a logger with correct level"""
 
-            def test_logget_level(self):
-                os.environ["LOGGING_LEVEL"] ="INFO"
+        def test_logger_level(self):
+            import logging
+            original_level = os.environ.get("LOGGING_LEVEL")
+            try:
+                os.environ["LOGGING_LEVEL"] = "INFO"
                 log = set_up_logger("test", file_name="dummy.log")
-                self.assertEqual(log.level, log.info)
+                self.assertEqual(log.level, logging.INFO)
+            finally:
+                if original_level is not None:
+                    os.environ["LOGGING_LEVEL"] = original_level
+                elif "LOGGING_LEVEL" in os.environ:
+                    del os.environ["LOGGING_LEVEL"]
 
 
 
