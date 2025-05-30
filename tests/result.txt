@@ -1,5 +1,10 @@
 python -m unittest discover -v tests
 
+
+test_attributes (test_veterinaria.TestAppointment.test_attributes)
+Prove basic attributes of an Appointment ... ok
+test_to_dict (test_veterinaria.TestAppointment.test_to_dict)
+Verify dict for JSON ... ok
 test_owner_add_find (test_veterinaria.TestDataBase.test_owner_add_find) ... ok
 test_pet_add_find_and_next_id (test_veterinaria.TestDataBase.test_pet_add_find_and_next_id) ... ok
 test_query_by_pet_no_exist (test_veterinaria.TestDataBase.test_query_by_pet_no_exist) ... ok
@@ -23,6 +28,6 @@ test_verify_number_invalid (test_veterinaria.TestValidator.test_verify_number_in
 test_verify_number_valid (test_veterinaria.TestValidator.test_verify_number_valid) ... ok
 
 ----------------------------------------------------------------------
-Ran 15 tests in 0.014s
+Ran 17 tests in 0.016s
 
 OK
