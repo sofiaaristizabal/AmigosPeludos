@@ -1,0 +1,28 @@
+python -m unittest discover -v tests
+
+test_owner_add_find (test_veterinaria.TestDataBase.test_owner_add_find) ... ok
+test_pet_add_find_and_next_id (test_veterinaria.TestDataBase.test_pet_add_find_and_next_id) ... ok
+test_query_by_pet_no_exist (test_veterinaria.TestDataBase.test_query_by_pet_no_exist) ... ok
+test_save_and_load_csv_json (test_veterinaria.TestFileManager.test_save_and_load_csv_json) ... ok
+test_str (test_veterinaria.TestOwner.test_str)
+Prove the toString ... ok
+test_to_dict (test_veterinaria.TestOwner.test_to_dict)
+Verify dict of serialization ... ok
+test_age (test_veterinaria.TestPet.test_age)
+Prove age property calculation ... ok
+test_attributes (test_veterinaria.TestPet.test_attributes)
+Prove attributes are correctly assigned ... ok
+test_eq_false (test_veterinaria.TestPet.test_eq_false)
+Different attributes make false ... ok
+test_eq_true (test_veterinaria.TestPet.test_eq_true)
+Two pets with equal data must be the same ... ok
+test_check_valid_option (test_veterinaria.TestValidator.test_check_valid_option) ... ok
+test_verify_date_invalid (test_veterinaria.TestValidator.test_verify_date_invalid) ... ok
+test_verify_date_valid (test_veterinaria.TestValidator.test_verify_date_valid) ... ok
+test_verify_number_invalid (test_veterinaria.TestValidator.test_verify_number_invalid) ... ok
+test_verify_number_valid (test_veterinaria.TestValidator.test_verify_number_valid) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.014s
+
+OK
