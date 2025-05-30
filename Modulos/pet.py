@@ -12,7 +12,7 @@ class Pet:
         self.id = id
 
     """
-    edad:
+    age:
         1. Converts the birth date input into a date object
         2. gets today's date
         3. Checks if the pet's birthday has occured this year
