@@ -16,6 +16,8 @@ logger: logging.Logger = set_up_logger(
 
 
 class File_Manager():
+    
+    @staticmethod
     def save_database(database: Data_Base) -> None:
         logger.info("Started to save the database")
         File_Manager._save_pets(database.get_pets())
@@ -24,12 +26,14 @@ class File_Manager():
         logger.info("Database saved")
 
 
+    @staticmethod
     def load_database(database: Data_Base) -> None:
         File_Manager._load_owners(database)
         File_Manager._load_pets(database)
         File_Manager._load_appointments(database)
 
 
+    @staticmethod
     def _load_pets(database: Data_Base, path: str="Datos", pets_file: str="\\Pets.csv") -> None:
         logger.info("Reading the pets into the database")
         try:
@@ -39,13 +43,33 @@ class File_Manager():
                 number_pets_read: int = 0
                 for row in reader:
                     try:
+                        ####################Solución a typos############################
+                        # Primero verificar owner
+                        owner_id = row.get("owner")
+                        if owner_id is None:
+                            logger.error(f"Pet with id {row.get('id')} has no owner id")
+                            continue
+                        # Fin de nueva verif
+
+                        # Verificar Pet id
+                        pet_id = row.get("id")
+                        if pet_id is None:
+                            logger.error(f"Pet row is missing 'id': {row}")
+                            continue
+                        try:
+                            pet_id_int = int(pet_id)
+                        except ValueError:
+                            logger.error(f"Pet id '{pet_id}' is not a valid integer")
+                            continue
+                        # Fin de nueva verif 2
+                        ###############################################################
                         pet = Pet(
-                            row.get("nombre"),
-                            row.get("especie"),
-                            row.get("fecha_de_nacimiento"),
-                            row.get("raza"),
-                            database.find_owner_by_id(int(row.get("owner"))),
-                            int(row.get("id"))
+                            row.get("nombre") or "",
+                            row.get("especie") or "",
+                            row.get("fecha_de_nacimiento") or "",
+                            row.get("raza") or "",
+                            database.find_owner_by_id(int(owner_id)),
+                            pet_id_int
                         )
                     except Owner_Not_Found_Error:
                         logger.error(f"The PET with id {row.get('id')} couldn't get loaded")
@@ -61,6 +85,7 @@ class File_Manager():
             logger.error("PETS NOT READ, the CSV file for the pets couldn't be found")
 
 
+    @staticmethod
     def _load_appointments(database: Data_Base, path: str="Datos", appointment_folder: str="\\appointments") -> None:
         logger.info("Reading the appointments into the database")
         number_appointment_count = 0
@@ -85,6 +110,7 @@ class File_Manager():
         logger.info(f"APPOINTMENTS LOADED, count: {number_appointment_count}")
 
 
+    @staticmethod
     def _load_owners(database: Data_Base, path: str="Datos", owners_file: str="\\Owners.csv") -> None:
         logger.info("Reading the owners into the database")
         try:
@@ -111,6 +137,7 @@ class File_Manager():
             logger.error("OWNERS NOT READ, the CSV file for the owners couldn't be found")
     
 
+    @staticmethod
     def _save_pets(pets: list[Pet], path: str="Datos", pets_file: str="\\Pets.csv") -> None:
         logger.info("Saving the pets")
         # w because we want to reset the database each time
@@ -125,6 +152,7 @@ class File_Manager():
             logger.error("PETS NOT SAVED, the CSV file for the pets couldn't be found")
 
 
+    @staticmethod
     def _save_appointments(appointments: list[Appointment], path: str="Datos", appointment_folder: str="\\appointments") -> None:
         logger.info("saving the appoinments")
         for appointment in appointments:
@@ -137,6 +165,7 @@ class File_Manager():
                 logger.error(f"Couldn't save appointment with id: {appointment.id}, error message: {e}")
 
 
+    @staticmethod
     def _save_owners(owners: list[Owner], path: str="Datos", owners_file: str="\\Owners.csv") -> None:
         logger.info("Saving the owners")
         # w because we want to reset the database each time
@@ -154,5 +183,6 @@ class File_Manager():
             logger.error(f"Couldn't finish saving all the owners, error message: {e}")
     
 
+    @staticmethod
     def _convert_to_json(object: dict) -> str:
         return json.dumps(object)
