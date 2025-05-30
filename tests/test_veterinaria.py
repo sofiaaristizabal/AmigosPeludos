@@ -5,6 +5,7 @@ import csv
 import tempfile
 import logging
 from datetime import datetime
+import Modulos.file_manager as file_manager_module
 from Modulos.pet import Pet
 from Modulos.owner import Owner
 from Modulos.appointment import Appointment
@@ -24,11 +25,7 @@ class TestPet(unittest.TestCase):
         self.pet = Pet("Dulce", "Perro", "01/01/2020", "Pekines", self.owner, id=42)
 
     def test_attributes(self):
-        """Prove attributes are correctly assigned
-            assertEqual: 
-                Fail if the two objects are unequal as determined by the '=='
-                operator.
-        """
+        """Prove attributes are correctly assigned"""
         self.assertEqual(self.pet.nombre, "Dulce")
         self.assertEqual(self.pet.especie, "Perro")
         self.assertEqual(self.pet.raza, "Pekines")
@@ -37,9 +34,9 @@ class TestPet(unittest.TestCase):
     
     def test_age(self):
         """Prove age property calculation"""
-        current_year = datetime.now().year
-        birth_year = 2020
-        expected_age = current_year - birth_year
+        today = datetime.now().date()
+        birth = datetime.strptime(self.pet.fecha_de_nacimiento, "%d/%m/%Y").date()
+        expected_age = today.year - birth.year - ((today.month, today.day) < (birth.month, birth.day))
         self.assertEqual(self.pet.age, expected_age)
 
     def test_eq_true(self):
@@ -48,7 +45,7 @@ class TestPet(unittest.TestCase):
         self.assertTrue(self.pet == other)
 
     def test_eq_false(self):
-        """Different attributes make false"""
+        """Las mascotas con nombres diferentes NO deben considerarse iguales."""
         other = Pet("Luna", "Perro", "01/01/2020", "Pekines", self.owner, id=42)
         self.assertFalse(self.pet == other)
         
@@ -60,10 +57,11 @@ class TestOwner(unittest.TestCase):
         self.owner = Owner("Luis", "3245657474", "Av Otraparte", id=2)
 
     def test_str(self):
-        """Prove the toString"""
+        """Comprueba __str__ incluye nombre, teléfono y dirección."""
         s = str(self.owner)
         self.assertIn("Luis", s)
-        self.assertIn("474", s)
+        self.assertIn("3245657474", s)
+        self.assertIn("Av Otraparte", s)
 
     def test_to_dict(self):
         """Verify dict of serialization"""
@@ -71,29 +69,27 @@ class TestOwner(unittest.TestCase):
         self.assertEqual(d["nombre"], "Luis")
         self.assertEqual(d["id"], 2)
 
-
 # Test Appointment
 class TestAppointment(unittest.TestCase):
-         """Creation and to_dict"""
-         
-         def setUp(self):
-             owner = Owner("Santiago", "3007654747", "Calle 78", id=3)
-             pet = Pet("Copito", "Perro", "15/03/2019", "Pomeranian", owner, id=7)
-             self.app = Appointment("15/05/2025", "Vacunación", "OK", pet, id=100)
-         
-         def test_attributes(self):
-             """Prove basic attributes of an Appointment"""
-             self.assertEqual(self.app.motivo, "Vacunación")
-             self.assertEqual(self.app.mascota.nombre, "Copito")
+    """Creation and to_dict"""
+    
+    def setUp(self):
+        owner = Owner("Santiago", "3007654747", "Calle 78", id=3)
+        pet = Pet("Copito", "Perro", "15/03/2019", "Pomeranian", owner, id=7)
+        self.app = Appointment("15/05/2025", "Vacunación", "OK", pet, id=100)
+    
+    def test_attributes(self):
+        """Prove basic attributes of an Appointment"""
+        self.assertEqual(self.app.motivo, "Vacunación")
+        self.assertEqual(self.app.mascota.nombre, "Copito")
 
-         def test_to_dict(self):
-             """Verify dict for JSON"""
-             d = self.app.to_dict()
-             self.assertEqual(d["id"], 100)
-             self.assertEqual(d["id_mascota"], 7)
+    def test_to_dict(self):
+        """Verify dict for JSON"""
+        d = self.app.to_dict()
+        self.assertEqual(d["id"], 100)
+        self.assertEqual(d["id_mascota"], 7)
 
 # Validators and options management
-
 class TestValidator(unittest.TestCase):
     """Try verify_number, verify_date and check_valid_option"""
 
@@ -118,11 +114,7 @@ class TestValidator(unittest.TestCase):
 
 # Prove Data_Base in memory
 class TestDataBase(unittest.TestCase):
-    """Tests
-        1. Add
-        2. Query
-        3. Exceptions 
-    """
+    """Tests: 1) Add, 2) Query, 3) Exceptions"""
     def setUp(self):
         self.db = Data_Base()
     
@@ -140,72 +132,99 @@ class TestDataBase(unittest.TestCase):
         pet = Pet("Toby", "Perro", "10/10/2020", "Labrador", owner, id=5)
         self.db.add_pet(pet)
         self.assertEqual(self.db.find_pet("Toby", "Luciana"), pet)
-        self.assertEqual(self.db.get_next_pet_id(), 6) # REV
-    
+        self.assertEqual(self.db.get_next_pet_id(), 6)
+
     def test_query_by_pet_no_exist(self):
         with self.assertRaises(ValueError):
             self.db.query_by_pet("NoExiste", "NadieExiste")
 
+    def test_find_pet_by_id_error(self):
+        """find_pet_by_id con id inexistente lanza Pet_Not_Found_Error"""
+        with self.assertRaises(Pet_Not_Found_Error):
+            self.db.find_pet_by_id(999)
 
 # Try Serialization and Deserialization (CSV/JSON)
-
 class TestFileManager(unittest.TestCase):
-    """ Tests on saving and upload for File_Manager using tempfiles"""
+    """Tests on saving and loading for File_Manager using tempfiles"""
 
     def setUp(self):
-        # Create clean database and temporary directory
         self.db = Data_Base()
         o = Owner("Test", "+570000000000", "Dir", id=1)
         p = Pet("Adi", "Gato", "01/02/2021", "Mestizo", o, id=1)
         a = Appointment("02/03/2022", "Chequeo", "Bien", p, id=1)
-        # We add the previous
         self.db.add_owner(o); self.db.add_pet(p); self.db.add_query(a)
 
         self.tempdir = tempfile.TemporaryDirectory()
         self.base = self.tempdir.name
-
-        # Lock directories
         os.makedirs(os.path.join(self.base, "Datos", "appointments"))
 
     def tearDown(self):
         self.tempdir.cleanup()
     
     def test_save_and_load_csv_json(self):
-        # Save
         File_Manager._save_owners(self.db.get_owners(), path=os.path.join(self.base, "Datos"))
         File_Manager._save_pets(self.db.get_pets(), path=os.path.join(self.base, "Datos"))
         File_Manager._save_appointments(self.db.get_appointments(), path=os.path.join(self.base, "Datos"))
 
-        # New Base to upload
         db2 = Data_Base()
         File_Manager._load_owners(db2, path=os.path.join(self.base, "Datos"))
         File_Manager._load_pets(db2, path=os.path.join(self.base, "Datos"))
         File_Manager._load_appointments(db2, path=os.path.join(self.base, "Datos"))
 
-        # Verify objects were uploades (Len = 1 because we only added one)
-        self.assertEqual(len(db2.get_owners()), 1) 
+        self.assertEqual(len(db2.get_owners()), 1)
         self.assertEqual(len(db2.get_pets()), 1)
         self.assertEqual(len(db2.get_appointments()), 1)
 
-        # Testing Logging
-        class TestLogging(unittest.TestCase):
-            """Proves set_up_logger creates a logger with correct level"""
+    def test_load_pets_file_not_found_logs_error(self):
+        """Si la ruta de pets no existe, loguea FileNotFoundError"""
+        log_path = os.path.join(self.base, "fm.log")
+        temp_logger = logging.getLogger("fm_test")
+        for h in temp_logger.handlers: temp_logger.removeHandler(h)
+        fh = logging.FileHandler(log_path, mode="w")
+        temp_logger.addHandler(fh)
+        file_manager_module.logger = temp_logger
+        File_Manager._load_pets(self.db, path=os.path.join(self.base, "NoExiste"))
+        fh.flush()
+        with open(log_path, 'r') as f:
+            content = f.read()
+        self.assertIn("couldn't be found", content)
+        temp_logger.removeHandler(fh)
+        fh.close()
 
-        def test_logger_level(self):
-            original_level = os.environ.get("LOGGING_LEVEL")
-            try:
-                os.environ["LOGGING_LEVEL"] = "INFO"
-                log = set_up_logger("test", file_name="dummy.log")
-                self.assertEqual(log.level, logging.INFO)
-            finally:
-                if original_level is not None:
-                    os.environ["LOGGING_LEVEL"] = original_level
-                elif "LOGGING_LEVEL" in os.environ:
-                    del os.environ["LOGGING_LEVEL"]
+    def test_save_pets_file_not_found_logs_error(self):
+        """Si la ruta de pets no existe, loguea FileNotFoundError en save"""
+        log_path = os.path.join(self.base, "fm_save.log")
+        temp_logger = logging.getLogger("fm_save_test")
+        for h in temp_logger.handlers: temp_logger.removeHandler(h)
+        fh = logging.FileHandler(log_path, mode="w")
+        temp_logger.addHandler(fh)
+        file_manager_module.logger = temp_logger
+        File_Manager._save_pets(self.db.get_pets(), path=os.path.join(self.base, "NoExiste"))
+        fh.flush()
+        with open(log_path, 'r') as f:
+            content = f.read()
+        self.assertIn("couldn't be found", content)
+        temp_logger.removeHandler(fh)
+        fh.close()
 
+# Test logging_config file writing
+class TestLoggingConfig(unittest.TestCase):
+    """Pruebas de set_up_logger: escritura en handler adicional"""
 
+    def test_logging_writes_to_extra_handler(self):
+        os.environ["LOGGING_LEVEL"] = "INFO"
+        tmp = tempfile.TemporaryDirectory()
+        log_path = os.path.join(tmp.name, "test.log")
+        fh = logging.FileHandler(log_path, mode="w")
+        logger = set_up_logger("testwrite", fh, file_name="unused.log")
+        logger.info("MensajeDePrueba")
+        fh.flush()
+        with open(log_path, 'r') as f:
+            content = f.read()
+        self.assertIn("MensajeDePrueba", content)
+        logger.removeHandler(fh)
+        fh.close()
+        tmp.cleanup()
 
-    
-
-
-
+if __name__ == '__main__':
+    unittest.main()
