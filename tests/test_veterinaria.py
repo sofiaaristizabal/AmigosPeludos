@@ -3,6 +3,7 @@ import os
 import json
 import csv
 import tempfile
+import logging
 from datetime import datetime
 from Modulos.pet import Pet
 from Modulos.owner import Owner
@@ -64,11 +65,11 @@ class TestOwner(unittest.TestCase):
         self.assertIn("Luis", s)
         self.assertIn("474", s)
 
-def test_to_dict(self):
-         """Verify dict of serialization"""
-         d = self.owner.to_dict()
-         self.assertEqual(d["nombre"], "Luis")
-         self.assertEqual(d["id"], 2)
+    def test_to_dict(self):
+        """Verify dict of serialization"""
+        d = self.owner.to_dict()
+        self.assertEqual(d["nombre"], "Luis")
+        self.assertEqual(d["id"], 2)
 
 
 # Test Appointment
@@ -191,7 +192,6 @@ class TestFileManager(unittest.TestCase):
             """Proves set_up_logger creates a logger with correct level"""
 
         def test_logger_level(self):
-            import logging
             original_level = os.environ.get("LOGGING_LEVEL")
             try:
                 os.environ["LOGGING_LEVEL"] = "INFO"
