@@ -49,6 +49,11 @@ class File_Manager():
                         if owner_id is None:
                             logger.error(f"Pet with id {row.get('id')} has no owner id")
                             continue
+                        try:
+                            owner_id_int = int(owner_id)
+                        except ValueError:
+                            logger.error(f"Owner id '{owner_id}' is not a valid integer")
+                            continue
                         # Fin de nueva verif
 
                         # Verificar Pet id
@@ -68,7 +73,7 @@ class File_Manager():
                             row.get("especie") or "",
                             row.get("fecha_de_nacimiento") or "",
                             row.get("raza") or "",
-                            database.find_owner_by_id(int(owner_id)),
+                            database.find_owner_by_id(owner_id_int),
                             pet_id_int
                         )
                     except Owner_Not_Found_Error:
@@ -120,11 +125,22 @@ class File_Manager():
                 number_owners_read = 0
 
                 for row in reader:
+                    # Validate owner id
+                    owner_id = row.get("id")
+                    if owner_id is None:
+                        logger.error(f"Owner row is missing 'id': {row}")
+                        continue
+                    try:
+                        owner_id_int = int(owner_id)
+                    except ValueError:
+                        logger.error(f"Owner id '{owner_id}' is not a valid integer")
+                        continue
+
                     owner = Owner(
-                        row.get("nombre"),
-                        row.get("telefono"),
-                        row.get("direccion"),
-                        int(row.get("id"))
+                        row.get("nombre") or "",
+                        row.get("telefono") or "",
+                        row.get("direccion") or "",
+                        owner_id_int
                     )
 
                     database.add_owner(owner)
