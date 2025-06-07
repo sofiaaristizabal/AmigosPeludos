@@ -27,46 +27,44 @@ class Enhanced_File_Manager:
             self.sqlite_manager = None
 
     @staticmethod
-    def save_database(database: Data_Base, use_sqlite: bool = True) -> None:
+    def save_database(database: Data_Base) -> None:
         """Save database to both file formats and SQLite."""
         logger.info("Started to save the database")
+
+        # Save to SQLite
+        try:
+            sqlite_manager = SQLite_Manager()
+            Enhanced_File_Manager._save_to_sqlite(database, sqlite_manager)
+        except Exception as e:
+            logger.error(f"Failed to save to SQLite: {e}")
 
         # Save to traditional formats (CSV/JSON)
         Enhanced_File_Manager._save_pets(database.get_pets())
         Enhanced_File_Manager._save_appointments(database.get_appointments())
         Enhanced_File_Manager._save_owners(database.get_owners())
 
-        # Save to SQLite if enabled and available
-        if use_sqlite:
-            try:
-                sqlite_manager = SQLite_Manager()
-                Enhanced_File_Manager._save_to_sqlite(database, sqlite_manager)
-            except Exception as e:
-                logger.error(f"Failed to save to SQLite: {e}")
-
         logger.info("Database saved to all formats")
 
+
     @staticmethod
-    def load_database(database: Data_Base, prefer_sqlite: bool = True) -> None:
+    def load_database(database: Data_Base) -> None:
         """Load database from SQLite first, then fall back to CSV/JSON if needed."""
         logger.info("Starting to load database")
 
-        if prefer_sqlite:
-            try:
-                sqlite_manager = SQLite_Manager()
-                if Enhanced_File_Manager._load_from_sqlite(database, sqlite_manager):
-                    logger.info("Database loaded successfully from SQLite")
-                    return
-                else:
-                    logger.warning("SQLite load failed, falling back to CSV/JSON")
-            except Exception as e:
-                logger.error(f"SQLite loading error: {e}, falling back to CSV/JSON")
-
-        # Fall back to traditional loading
-        Enhanced_File_Manager._load_owners(database)
-        Enhanced_File_Manager._load_pets(database)
-        Enhanced_File_Manager._load_appointments(database)
-        logger.info("Database loaded from CSV/JSON files")
+        try:
+            sqlite_manager = SQLite_Manager()
+            if Enhanced_File_Manager._load_from_sqlite(database, sqlite_manager):
+                logger.info("Database loaded successfully from SQLite")
+                return
+            else:
+                logger.warning("SQLite load failed, falling back to CSV/JSON")
+        except Exception as e:
+            logger.error(f"SQLite loading error: {e}, falling back to CSV/JSON")
+            # Fall back to traditional loading
+            Enhanced_File_Manager._load_owners(database)
+            Enhanced_File_Manager._load_pets(database)
+            Enhanced_File_Manager._load_appointments(database)
+            logger.info("Database loaded from CSV/JSON files")
 
     @staticmethod
     def _save_to_sqlite(database: Data_Base, sqlite_manager: SQLite_Manager) -> bool:
@@ -228,6 +226,7 @@ class Enhanced_File_Manager:
                 number_pets_read: int = 0
                 for row in reader:
                     try:
+                        ####################Solución a typos############################
                         # Verificar owner
                         owner_id = row.get("owner")
                         if owner_id is None:
@@ -238,6 +237,7 @@ class Enhanced_File_Manager:
                         except ValueError:
                             logger.error(f"Owner id '{owner_id}' is not a valid integer")
                             continue
+                        # Fin de nueva verif
 
                         # Verificar Pet id
                         pet_id = row.get("id")
@@ -249,7 +249,8 @@ class Enhanced_File_Manager:
                         except ValueError:
                             logger.error(f"Pet id '{pet_id}' is not a valid integer")
                             continue
-
+                        # Fin de nueva verif 2
+                        ###############################################################
                         pet = Pet(
                             row.get("nombre") or "",
                             row.get("especie") or "",
@@ -348,6 +349,7 @@ class Enhanced_File_Manager:
     @staticmethod
     def _save_pets(pets: list[Pet], path: str = "Datos", pets_file: str = "\\Pets.csv") -> None:
         logger.info("Saving the pets")
+        # w because we want to reset the database each time
         try:
             if len(pets) == 0:
                 logger.warning("No pets to save")

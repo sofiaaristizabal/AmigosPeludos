@@ -13,16 +13,20 @@ from rich import print
 import time
 from logging_config import set_up_logger
 from Modulos.file_manager import File_Manager
+from Modulos.enhanced_file_manager import Enhanced_File_Manager
 
 menus_time_logger = set_up_logger("time_spent_logger", file_name="menus_time_spent.log")
 general_logger = set_up_logger(__name__, file_name="run_time_logger.log")
 
+
 class Menus():
     def __init__(self):
         self.database = Data_Base()
-        File_Manager.load_database(self.database)  # Load the database at the start
+        # File_Manager.load_database(self.database)
+        Enhanced_File_Manager.load_database(self.database)  # Load the database at the start
+        self.file_manager = Enhanced_File_Manager()
 
-    def execute_function(self,function):
+    def execute_function(self, function):
         try:
             function()
         except ValueError as e:
@@ -30,9 +34,8 @@ class Menus():
             print("Por favor vuelvalo a intentar")
             time.sleep(2)
             general_logger.error(e)
-        
 
-    def main_menu(self,):
+    def main_menu(self, ):
         start_time = time.perf_counter()
         limpiar_terminal()
         print("=" * 100)
@@ -61,29 +64,28 @@ class Menus():
         match selected_option:
             case 1:
                 self.execute_function(self.registar_mascota)
-                
+
             case 2:
                 self.execute_function(self.registar_consulta)
-                
+
             case 3:
                 self.execute_function(self.list_all_pets)
-                
+
             case 4:
                 self.execute_function(self.pets_appointments)
 
             case 5:
                 print("[bold]Guardando base de datos[/bold]")
-                File_Manager.save_database(self.database)
+                self.file_manager.save_database(self.database)
                 print("[bold green]La base de datos fue exitosamente guardada[/bold green]")
                 time.sleep(1.3)
 
             case 6:
                 if typer.confirm("¿Está seguro de que desea salir?"):
-                    File_Manager.save_database(self.database)  # Always save the database at the end
-                    raise typer.Exit(code = 1)
-        
+                    self.file_manager.save_database(self.database)  # Always save the database at the end
+                    raise typer.Exit(code=1)
 
-    def list_all_pets(self,):
+    def list_all_pets(self, ):
         start_time = time.perf_counter()
         limpiar_terminal()
 
@@ -94,15 +96,14 @@ class Menus():
         pets_table = Table("Nombre", "Especie", "Fecha de nacimiento", "Raza", "Dueño")
         for pet in self.database.get_pets():
             pets_table.add_row(pet.nombre, pet.especie, pet.fecha_de_nacimiento, pet.raza, pet.owner.nombre)
-        
+
         console = Console()
         console.print(pets_table)
 
         menus_time_logger.info(f"time spent in list_all_pets: {format(time.perf_counter() - start_time, '.3f')}")
         typer.prompt("Escriba cualquier cosa para volver al menu principal")
 
-
-    def registrar_dueno(self,) -> Owner:
+    def registrar_dueno(self, ) -> Owner:
         start_time = time.perf_counter()
         print("=" * 100)
         print(pyfiglet.figlet_format("Registro de dueno"))
@@ -117,7 +118,7 @@ class Menus():
         numero = typer.prompt('\nIngrese el numero telefonico del dueño de la mascota')
         if not verify_number(numero):
             raise ValueError('Número de celular invalido')
-        
+
         direccion = typer.prompt('\nIngrese la direccion del dueño de la mascota')
 
         print("Asi quedó la informacion del dueno:")
@@ -130,8 +131,7 @@ class Menus():
         menus_time_logger.info(f"time spent in registrar_dueno: {format(time.perf_counter() - start_time, '.3f')}")
         return owner
 
-
-    def registar_mascota(self,):
+    def registar_mascota(self, ):
         start_time = time.perf_counter()
         limpiar_terminal()
 
@@ -149,15 +149,17 @@ class Menus():
         fecha_de_nacimiento = typer.prompt('\nIngrese la fecha de nacimiento de la mascota en formatio dd/mm/yyyy')
         if not verify_date(fecha_de_nacimiento):
             raise ValueError("Fecha invalida")
-        
+
         especie = typer.prompt('\nIngrese la especie de la mascota')
         raza = typer.prompt('\nIngrese la raza de la mascota')
 
-        user_input = typer.prompt('\nSi el dueño ya esta registrado previamente presione 1, si el dueño aún no esta registrado presione 2')
-        
+        user_input = typer.prompt(
+            '\nSi el dueño ya esta registrado previamente presione 1, si el dueño aún no esta registrado presione 2')
+
         while not (selected_option := check_valid_option(user_input, 1, 2)):
             print('La opcion seleccionada no es valida')
-            user_input = typer.prompt('\nSi el dueño ya esta registrado previamente presione 1, si el dueño aun no esta registrado presione 2')
+            user_input = typer.prompt(
+                '\nSi el dueño ya esta registrado previamente presione 1, si el dueño aun no esta registrado presione 2')
 
         match selected_option:
             case 1:
@@ -179,12 +181,12 @@ class Menus():
         print("=" * 100)
         print("Asi quedó la mascota a ingresar")
         print(tabla_mascota)
-        
+
         if not typer.confirm("\nEsta seguro de ingresar la mascota?"):
             print("[/bold red]No se realizo el registro de la mascota[/bold red]")
             return
-        
-        mascota = Pet(nombre_mascota, especie, fecha_de_nacimiento, 
+
+        mascota = Pet(nombre_mascota, especie, fecha_de_nacimiento,
                       raza, owner, self.database.get_next_pet_id())
         self.database.add_pet(mascota)
         general_logger.info(f"A mascot has been registered: {mascota}")
@@ -192,8 +194,7 @@ class Menus():
         time.sleep(2)
         menus_time_logger.info(f"time spent in registrar_mascota: {format(time.perf_counter() - start_time, '.3f')}")
 
-
-    def registar_consulta(self,):
+    def registar_consulta(self, ):
         start_time = time.perf_counter()
         limpiar_terminal()
 
@@ -208,7 +209,7 @@ class Menus():
 
         nombre_mascota = typer.prompt('Ingrese el nombre de la mascota')
         nombre_owner = typer.prompt('Ingrese el nombre de su dueño')
-        
+
         mascota = self.database.find_pet(nombre_mascota, nombre_owner)
         if mascota is None:
             print("[bold red]Mascota no encontrada[/bold red]")
@@ -218,7 +219,7 @@ class Menus():
         fecha = typer.prompt('Ingrese la fecha de la consulta (dd/mm/aaaa)')
         if not verify_date(fecha):
             raise ValueError('Fecha invalida')
-        
+
         motivo = typer.prompt('Ingrese el motivo de la consulta')
         diagnostico = typer.prompt('Ingrese el diagnostico de la mascota')
 
@@ -229,7 +230,7 @@ class Menus():
         print("=" * 100)
         print("Asi quedo la consulta a ingresar")
         print(tabla_consulta)
-        
+
         if not typer.confirm("\nEsta seguro de ingresar la consulta?"):
             print("[/bold red]No se realizo el registro de la consulta[/bold red]")
             return
@@ -241,8 +242,7 @@ class Menus():
         time.sleep(2)
         menus_time_logger.info(f"time spent in registrar consulta: {format(time.perf_counter() - start_time, '.3f')}")
 
-
-    def pets_appointments(self,):
+    def pets_appointments(self, ):
         start_time = time.perf_counter()
         limpiar_terminal()
 
@@ -260,7 +260,8 @@ class Menus():
             print("La mascota no tiene consultas registradas")
         else:
             for consulta in appointments:
-                tabla_consulta.add_row(consulta.mascota.nombre, consulta.mascota.owner.nombre, consulta.fecha, consulta.motivo, consulta.diagnostico)
+                tabla_consulta.add_row(consulta.mascota.nombre, consulta.mascota.owner.nombre, consulta.fecha,
+                                       consulta.motivo, consulta.diagnostico)
 
             print("\n")
             print(tabla_consulta)
