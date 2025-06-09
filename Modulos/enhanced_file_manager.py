@@ -183,8 +183,7 @@ class Enhanced_File_Manager:
             logger.info("Starting database synchronization")
 
             # Save to all formats
-            Enhanced_File_Manager.save_database(database, use_sqlite=True)
-
+            Enhanced_File_Manager.save_database(database)
             # Verify synchronization by comparing counts
             status = Enhanced_File_Manager.get_database_status()
             sqlite_info = status.get('sqlite', {}).get('info', {})
